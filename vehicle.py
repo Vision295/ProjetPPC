@@ -2,7 +2,6 @@ import random
 
 
 class Vehicle:
-      
 
       def genVehicle(self):
             self.x = random.randint(0, 10)
