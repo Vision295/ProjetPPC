@@ -23,5 +23,4 @@ class Coordinator(Process):
             """gets a passage Queue and returns the same queue sorted"""
             if len(passageQueue) == 1 : return passageQueue
             elif len(passageQueue) == 2:
-                  if passageQueue[0]:
-                        ...
+                  ...
