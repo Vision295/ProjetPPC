@@ -1,7 +1,7 @@
 from multiprocessing import Process, Array, Queue
 import time
 
-class Corrdinator(Process):
+class Coordinator(Process):
       
       def __init__(self, queues:Queue, array:Array):
             super().__init__()
@@ -10,7 +10,8 @@ class Corrdinator(Process):
 
       def run(self): 
             """without any rules : everyone passes when he can"""
-            for index, light in enumerate(self.array):
-                  if light and not self.queues[index].empty():
-                        print("the vehicle just passed : ", self.queues[index].get())
-
+            while True:
+                  for index, light in enumerate(self.array):
+                        if light and not self.queues[index].empty():
+                              print("the vehicle just passed : ", self.queues[index].get())
+                              

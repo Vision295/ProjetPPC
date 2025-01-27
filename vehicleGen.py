@@ -28,15 +28,15 @@ class VehicleGen(Process):
       def run(self): 
             while True:
                   vehicle = self.generate_vehicle()  # Random source/destination
-                  queue = VehicleGen.get_queue(vehicle['source'], self.queues)  # Select appropriate queue
-                  queue.put(vehicle['dest'] + self.priority)  # Add vehicle to queue
                   print(
                         "Priority" if self.priority == 'P' else "Normal", 
-                        " vehicle added to the queue \n\tsource : ",
+                        "vehicle is being added to the queue \n\tsource : ",
                         vehicle['source'],
                         "\n\tdestination : ",
                         vehicle['dest']
                   )
+                  queue = VehicleGen.get_queue(vehicle['source'], self.queues)  # Select appropriate queue
+                  queue.put(vehicle['dest'] + self.priority)  # Add vehicle to queue
                   sleep(VehicleGen.random_sleep_time(self.timeToWait))
 
       @staticmethod
