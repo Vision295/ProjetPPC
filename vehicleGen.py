@@ -29,7 +29,7 @@ class VehicleGen(Process):
             while True:
                   vehicle = self.generate_vehicle()  # Random source/destination
                   queue = VehicleGen.get_queue(vehicle['source'], self.queues)  # Select appropriate queue
-                  queue.put(vehicle['source'] + vehicle['dest'] + self.priority)  # Add vehicle to queue
+                  queue.put(vehicle['dest'] + self.priority)  # Add vehicle to queue
                   print(
                         "Priority" if self.priority == 'P' else "Normal", 
                         " vehicle added to the queue \n\tsource : ",
@@ -39,6 +39,7 @@ class VehicleGen(Process):
                   )
                   sleep(VehicleGen.random_sleep_time(self.timeToWait))
 
+      @staticmethod
       def get_queue(source:str, queues:list) -> Queue:
             match source:
                   case 'N': return queues[0]

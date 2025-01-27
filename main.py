@@ -11,14 +11,15 @@ vehicleQueues = [
       Queue(MAXSIZE)
 ]
 
-trafficLigthState = Array('b', [1, 1, 1, 1])
+trafficLigthStates = Array('b', [1, 1, 1, 1])
 
 
 if __name__ == "__main__":
 
       normal_traffic_gen = VehicleGen(vehicleQueues, priority=False)
       priority_traffic_gen = VehicleGen(vehicleQueues, priority=True)
-      coordinator = Coordinator()
+      coordinator = Coordinator(vehicleQueues, trafficLigthStates)
       
       normal_traffic_gen.start()
       priority_traffic_gen.start()
+      coordinator.start()
