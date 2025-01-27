@@ -1,5 +1,6 @@
 from multiprocessing import Queue
-from vehicle import VehicleGen
+from vehicleGen import VehicleGen
+
 
 MAXSIZE = 100
 
