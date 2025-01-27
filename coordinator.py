@@ -12,6 +12,16 @@ class Coordinator(Process):
             """without any rules : everyone passes when he can"""
             while True:
                   for index, light in enumerate(self.array):
+                        passageQueue = []
                         if light and not self.queues[index].empty():
-                              print("the vehicle just passed : ", self.queues[index].get())
-                              
+                              passageQueue.append(self.queues[index].get())
+                  self.getPassageOrder(passageQueue) 
+                  
+
+
+      def getPassageOrder(self, passageQueue:list[str]) -> list[str]:
+            """gets a passage Queue and returns the same queue sorted"""
+            if len(passageQueue) == 1 : return passageQueue
+            elif len(passageQueue) == 2:
+                  if passageQueue[0]:
+                        ...
