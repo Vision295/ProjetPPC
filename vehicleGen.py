@@ -36,7 +36,7 @@ class VehicleGen(Process):
                         vehicle['dest']
                   )
                   queue = VehicleGen.get_queue(vehicle['source'], self.queues)  # Select appropriate queue
-                  queue.put(vehicle['dest'] + self.priority)  # Add vehicle to queue
+                  queue.put(vehicle['source'] + vehicle['dest'] + self.priority)  # Add vehicle to queue
                   sleep(VehicleGen.random_sleep_time(self.timeToWait))
 
       @staticmethod
