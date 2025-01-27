@@ -2,6 +2,7 @@
 import time
 import signal
 import multiprocessing
+from multiprocessing import Process
 
 class Lights(Process):
 

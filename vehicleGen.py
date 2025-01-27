@@ -1,17 +1,20 @@
 from random import choice, random
 from multiprocessing import Queue, Process
 from time import sleep
+from lights import Lights
 
 class VehicleGen(Process):
       
       random_sleep_time = lambda param: random() * param
 
-      def __init__(self, queues:list[Queue], priority:bool):
+      def __init__(self, queues:list[Queue], priority:bool, lights_pid, priority_direction_value):
             super().__init__()
 
             self.queues = queues
             self.priority = 'P' if priority else 'N'
             self.timeToWait = 5 if self.priority == 'N' else 20
+            self.lights_pid = lights_pid
+            self.priority_directoin_value = priority_direction_value
 
       def generate_vehicle(self) -> dict[str,  str]:
             """
