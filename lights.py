@@ -7,22 +7,28 @@ from multiprocessing import Process
 class Lights(Process):
 
 
-    def __init__(self):
+    def __init__(self, lights_state, priority_mode, priority_direction):
             super().__init__()
-            self.lights_state = multiprocessing.Array('i', [1,1,0,0])
-            self.priority_mode = multiprocessing.Value('b', False)
-            self.priority_direction = multiprocessing.Value('i', -1)
+            self.lights_state = lights_state
+            self.priority_mode = priority_mode
+            self.priority_direction = priority_direction
             self.lock = multiprocessing.Lock()
 
     def change_lights(self):
         if self.lights_state[0] == 1:
-            self.lights_state[:] = [0,0,1,1]
+            self.lights_state[:] = [1,0,1,0]
         else : 
-            self.lights_state[:] = [1,1,0,0]
+            self.lights_state[:] = [0,1,0,1]
 
-    def priority_lights(self, direction):
-        self.lights_state[:] = [0,0,0,0]
-        self.lights_state[direction] = 1
+    def get_priority_lights(self):
+        match self.priority_direction: 
+            case 0 : self.lights_state[:] = [1,0,1,0]
+            case 1 : self.lights_state[:] = [0,1,0,1]
+            case 2 : self.lights_state[:] = [1,0,1,0]
+            case 3 : self.lights_state[:] = [0,1,0,1]
+            case _: return None
+
+    
 
     def handle_priority_signal(self, sig, frame):
         with self.lock:
@@ -38,7 +44,7 @@ class Lights(Process):
         while True:
             with self.lock:
                 if self.priority_mode.value:
-                    self.priority_lights(self.priority_direction.value)
+                    self.get_priority_lights()
                 else:
                     self.change_lights()
             time.sleep(5)
