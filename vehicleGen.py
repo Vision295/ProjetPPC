@@ -1,10 +1,12 @@
+# vehicleGen.py
+
 from random import choice, random
 from multiprocessing import Queue, Process
 from time import sleep
+from utils import *
 
 class VehicleGen(Process):
       
-      random_sleep_time = lambda param: random() * param
 
       def __init__(self, queues:list[Queue], priority:bool):
             super().__init__()
@@ -34,15 +36,6 @@ class VehicleGen(Process):
                         "\n\tdestination : ",
                         vehicle['dest']
                   )
-                  queue = VehicleGen.get_queue(vehicle['source'], self.queues)  # Select appropriate queue
+                  queue = get_queue(vehicle['source'], self.queues)  # Select appropriate queue
                   queue.put(vehicle['source'] + vehicle['dest'] + self.priority)  # Add vehicle to queue
-                  sleep(VehicleGen.random_sleep_time(self.timeToWait))
-
-      @staticmethod
-      def get_queue(source:str, queues:list) -> Queue:
-            match source:
-                  case 'N': return queues[0]
-                  case 'S': return queues[1]
-                  case 'W': return queues[2]
-                  case 'E': return queues[3]
-                  case _ : return None
+                  sleep(random_sleep_time(self.timeToWait))
