@@ -1,8 +1,9 @@
+# main.py
+
 from multiprocessing import Queue, Array
 from vehicleGen import VehicleGen
 from coordinator import Coordinator
-
-MAXSIZE = 100
+from utils import *
 
 vehicleQueues = [
       Queue(MAXSIZE),
