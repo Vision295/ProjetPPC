@@ -18,8 +18,7 @@ class VehicleGen(Process):
                   generates a vehicle : a dictionnary with keys "source" and "dest" with source =/= dest and "priority"
             """
             self.sources_n_dest = ['N', 'E', 'S', 'W']
-            self.source = choice(self.sources_n_dest)
-            self.sources_n_dest.remove(self.source)
+            self.source = choice(['L', 'R', 'U', 'D'])
             return {
                   "source": self.source,
                   "dest": choice(self.sources_n_dest),
@@ -28,17 +27,18 @@ class VehicleGen(Process):
       def run(self): 
             while True:
                   vehicle = self.generate_vehicle()  # Random source/destination
-                  queue = VehicleGen.get_queue(vehicle['source'], self.queues)  # Select appropriate queue
-                  queue.put(vehicle['source'] + vehicle['dest'] + self.priority)  # Add vehicle to queue
                   print(
                         "Priority" if self.priority == 'P' else "Normal", 
-                        " vehicle added to the queue \n\tsource : ",
+                        "vehicle is being added to the queue \n\tsource : ",
                         vehicle['source'],
                         "\n\tdestination : ",
                         vehicle['dest']
                   )
+                  queue = VehicleGen.get_queue(vehicle['source'], self.queues)  # Select appropriate queue
+                  queue.put(vehicle['source'] + vehicle['dest'] + self.priority)  # Add vehicle to queue
                   sleep(VehicleGen.random_sleep_time(self.timeToWait))
 
+      @staticmethod
       def get_queue(source:str, queues:list) -> Queue:
             match source:
                   case 'N': return queues[0]
