@@ -13,7 +13,7 @@ class VehicleGen(Process):
             super().__init__()
 
             self.queues = queues
-            self.priority = 'P' if priority else 'N'
+            self.priority:str = 'P' if priority else 'N'
             self.timeToWait = 5 if self.priority == 'N' else 20
             self.lights_pid = lights_pid
             self.priority_directoin_value = priority_direction_value
