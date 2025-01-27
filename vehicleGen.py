@@ -20,7 +20,7 @@ class VehicleGen(Process):
                   generates a vehicle : a dictionnary with keys "source" and "dest" with source =/= dest and "priority"
             """
             self.sources_n_dest = ['N', 'E', 'S', 'W']
-            self.source = choice(['L', 'R', 'U', 'D'])
+            self.source = choice(['L', 'R', 'S', 'D'])
             return {
                   "source": self.source,
                   "dest": choice(self.sources_n_dest),

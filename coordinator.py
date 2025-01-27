@@ -1,7 +1,7 @@
 # coordinator.py
 
 from multiprocessing import Process, Array, Queue
-from random import randint
+from random import shuffle
 import time
 from utils import *
 
@@ -22,15 +22,19 @@ class Coordinator(Process):
                   self.getPassageOrder(passageQueue) 
                   
 
-      def passAtRandom(elements:list[str]) -> None:
-            for i in range(len(elements)):
-                  ...
-                  
-
       def getPassageOrder(self, passageQueue:list[str]) -> list[str]:
             """gets a passage Queue and returns the same queue sorted"""
             if len(passageQueue) == 1 : return passageQueue
             elif len(passageQueue) == 2:
                   for index, value in enumerate(passageQueue):
-                        if value == passageQueue[index+1]:
-                              self.passAtRandom(value, passageQueue)
+                        if value[1] == passageQueue[index+1][1]:
+                              return shuffle([value, passageQueue])
+                        else:
+                              if value[1] == 'R' : return [value, passageQueue[index+1]]
+                              if value[1] == 'S':
+                                    if passageQueue[index+1][1] == 'R':
+                                          return [passageQueue[index+1], value]
+                                    else:
+                                          return [value, passageQueue[index+1]]
+                              if value[1] == 'L':
+                                    ...
