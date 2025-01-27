@@ -3,11 +3,8 @@
 from random import choice, random
 from multiprocessing import Queue, Process
 from time import sleep
-<<<<<<< HEAD
 from lights import Lights
-=======
 from utils import *
->>>>>>> fe7ca8dd002bd486c31d9f415ac4f87bb8ec3e2a
 
 class VehicleGen(Process):
       
