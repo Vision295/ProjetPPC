@@ -1,7 +1,7 @@
 # coordinator.py
 
 from multiprocessing import Process, Queue
-from multiprocessing.sharedctypes import Array
+from multiprocessing.sharedctypes import Array, Value
 from random import shuffle
 from utils import *
 
@@ -9,10 +9,11 @@ from utils import *
 
 class Coordinator(Process):
       
-      def __init__(self, queues:list[Queue], lights_array:Array):
+      def __init__(self, queues:list[Queue], lights_array:Array, priority_mode:Value):
             super().__init__()
             self.lights_array = lights_array
             self.queues = queues
+            self.priority_mode = priority_mode
 
       def run(self): 
             """without any rules : everyone passes when he can"""
@@ -23,7 +24,8 @@ class Coordinator(Process):
                               passageQueue.append(peek(self.queues[index]))
                   if passageQueue:
                         for i in self.getPassageOrder(passageQueue):
-                              print(self.queues[get_direction(i[0])].get(), " vehicle passed the intersection ")
+                              if self.queues[get_direction(i[0])].get()[2] == "P":
+                                    self.priority_mode.value = False
                   
 
       def getPassageOrder(self, passageQueue:list[str]) -> list[str]:

@@ -17,7 +17,7 @@ class VehicleGen(Process):
             self.queues = queues
             self.vehicle_priority_gen = priority
             
-            self.timeToWait = 5 if self.vehicle_priority_gen else 20
+            self.timeToWait = 20 if self.vehicle_priority_gen else 5
             
                   
             self.lights_process = lights_process
