@@ -17,15 +17,15 @@ class VehicleGen(Process):
             self.queues = queues
             self.vehicle_priority_gen = priority
             
-            self.timeToWait = 5 if self.vehicle_priority_gen == 'N' else 20
+            self.timeToWait = 5 if self.vehicle_priority_gen else 20
             
                   
             self.lights_process = lights_process
-            self.generate_vehicle()
             try:
                   self.lights_pid:int = self.lights_process.pid
             except:
                   raise ChildProcessError("Cannot get the pid of a process not loaded in memory")
+            self.generate_vehicle()
 
       def generate_vehicle(self) -> dict[str,  str]:
             """
@@ -44,7 +44,7 @@ class VehicleGen(Process):
             while True:
                   self.generate_vehicle()  # Random source/destination
                   print(
-                        "Priority" if self.priority == 'P' else "Normal", 
+                        "Priority" if self.vehicle_priority_gen else "Normal", 
                         "vehicle is being added to the queue \n\tsource : ",
                         self.vehicle['source'],
                         "\n\tdestination : ",
