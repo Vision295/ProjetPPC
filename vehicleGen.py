@@ -23,7 +23,7 @@ class VehicleGen(Process):
                   
             self.lights_process = lights_process
             try:
-                  self.lights_pid:int = self.light_process.pid
+                  self.lights_pid:int = self.lights_process.pid
             except:
                   raise ChildProcessError("Cannot get the pid of a process not loaded in memory")
 
@@ -37,9 +37,7 @@ class VehicleGen(Process):
                   "priority": 'P' if self.vehicle_priority_gen else 'N' 
             }
             if self.vehicle["priority"] == 'P':
-                  self.priority_direction_value = get_direction(self.source)
-                  self.lights_process.priority_direction.value = self.priority_direction_value 
-
+                  self.lights_process.priority_direction.value = get_direction(self.vehicle["source"])
                   os.kill(self.lights_pid, signal.SIGUSR1)
       
       def run(self): 
