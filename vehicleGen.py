@@ -16,12 +16,12 @@ class VehicleGen(Process):
 
             self.queues = queues
             self.vehicle_priority_gen = priority
-            self.generate_vehicle()
             
             self.timeToWait = 5 if self.vehicle_priority_gen == 'N' else 20
             
                   
             self.lights_process = lights_process
+            self.generate_vehicle()
             try:
                   self.lights_pid:int = self.lights_process.pid
             except:
