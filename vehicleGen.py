@@ -1,7 +1,7 @@
 # vehicleGen.py
 
 from random import choice 
-from multiprocessing import Queue, Process, Lock
+from multiprocessing import Queue, Process
 from time import sleep
 from lights import Lights
 from utils import *
