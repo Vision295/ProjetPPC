@@ -14,8 +14,8 @@ class Lights(Process):
             # il faut enlever priority_mode
             super().__init__()
             self.lights_state = lights_state
-            self.priority_mode = priority_mode.value
-            self.priority_direction = priority_direction.value
+            self.priority_mode = priority_mode
+            self.priority_direction = priority_direction
 
       def change_normal_lights(self):
             if self.lights_state[0] == 1:
@@ -24,7 +24,7 @@ class Lights(Process):
                   self.lights_state[:] = [1,0,1,0]
 
       def change_priority_lights(self):
-            match self.priority_direction: 
+            match self.priority_direction.value: 
                   case 0 : self.lights_state[:] = [1,0,1,0]
                   case 1 : self.lights_state[:] = [0,1,0,1]
                   case 2 : self.lights_state[:] = [1,0,1,0]
@@ -33,7 +33,7 @@ class Lights(Process):
 
 
       def handle_priority_signal(self, sig, frame):
-            self.priority_mode = True
+            self.priority_mode.value = True
 
       def run(self):
             signal.signal(signal.SIGUSR1, self.handle_priority_signal)
