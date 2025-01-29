@@ -1,6 +1,7 @@
 # coordinator.py
 
-from multiprocessing import Process, Array, Queue
+from multiprocessing import Process, Queue
+from multiprocessing.sharedctypes import Array
 from random import shuffle
 import time
 from utils import *
@@ -30,12 +31,12 @@ class Coordinator(Process):
                         if value[1] == passageQueue[index+1][1]:
                               return shuffle([value, passageQueue])
                         else:
-                              if value[1] == 'R' : return [value, passageQueue[index+1]]
-                              if passageQueue[index+1] == 'R' : return [passageQueue[index+1], value]
-                              if value[1] == 'S': return [value, passageQueue[index+1]]
-                              if passageQueue[index+1] == 'S': return [passageQueue[index+1], value]
-                              if value[1] == 'L': return [value, passageQueue[index+1]]
-                              if passageQueue[index+1] == 'L': return [passageQueue[index+1], value]
-                              if value[1] == 'U': return [value, passageQueue[index+1]]
-                              if passageQueue[index+1] == 'U': return [passageQueue[index+1], value]
+                              if value[1] == 'R' :                return [value, passageQueue[index+1]]
+                              if passageQueue[index+1] == 'R' :   return [passageQueue[index+1], value]
+                              if value[1] == 'S':                 return [value, passageQueue[index+1]]
+                              if passageQueue[index+1] == 'S':    return [passageQueue[index+1], value]
+                              if value[1] == 'L':                 return [value, passageQueue[index+1]]
+                              if passageQueue[index+1] == 'L':    return [passageQueue[index+1], value]
+                              if value[1] == 'U':                 return [value, passageQueue[index+1]]
+                              if passageQueue[index+1] == 'U':    return [passageQueue[index+1], value]
                         
