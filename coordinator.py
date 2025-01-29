@@ -3,7 +3,6 @@
 from multiprocessing import Process, Queue
 from multiprocessing.sharedctypes import Array
 from random import shuffle
-import time
 from utils import *
 
 class Coordinator(Process):

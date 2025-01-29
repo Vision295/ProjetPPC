@@ -1,10 +1,11 @@
 # main.py
 
-from multiprocessing import Queue, Array, Value
+from multiprocessing import Queue, Array, Value, Process
 from vehicleGen import VehicleGen
 from lights import Lights
 from coordinator import Coordinator
 from utils import *
+
 
 
 
@@ -22,8 +23,11 @@ if __name__ == "__main__":
       
       priority_mode = Value('b', False)
       priority_direction = Value('b', -1)
+      
 
       lights = Lights(trafficLigthStates, priority_mode, priority_direction)
+      lights.start()
+      
       normal_traffic_gen = VehicleGen(vehicleQueues, False, lights.pid, lights)
       priority_traffic_gen = VehicleGen(vehicleQueues, True, lights.pid, lights)
       
