@@ -1,7 +1,7 @@
 # utils.py
 
 from multiprocessing import Queue
-import random
+from random import random
 
 
 MAXSIZE = 100
@@ -22,3 +22,15 @@ get_queue = lambda s, queues : queues[get_direction(s)]
 
 def get_queue(source:str, queues:list) -> Queue:
       return queues[get_direction(source)]
+
+
+
+def peek(queue:Queue) -> Queue:
+      try:
+            temp = [queue.get()]
+      except:
+            return None
+      while not queue.empty() : temp.append(queue.get())
+      val = temp[0]
+      while temp: queue.put(temp.pop(0))
+      return val
