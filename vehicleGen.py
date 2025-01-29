@@ -38,7 +38,7 @@ class VehicleGen(Process):
             }
             if self.vehicle["priority"] == 'P':
                   self.priority_direction_value = get_direction(self.source)
-                  self.lights_process.priority_direction = self.priority_direction_value 
+                  self.lights_process.priority_direction.value = self.priority_direction_value 
 
                   os.kill(self.lights_pid, signal.SIGUSR1)
       

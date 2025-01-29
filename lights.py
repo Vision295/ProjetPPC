@@ -2,20 +2,20 @@
 
 import time
 import signal
-from multiprocessing import Process, Lock
-from multiprocessing.sharedctypes import Array
+from multiprocessing import Process
+from multiprocessing.sharedctypes import Array, Value
 
 
 
 class Lights(Process):
 
 
-      def __init__(self, lights_state:Array, priority_mode:bool, priority_direction:int) -> None:
+      def __init__(self, lights_state:Array, priority_mode:Value, priority_direction:Value) -> None:
             # il faut enlever priority_mode
             super().__init__()
             self.lights_state = lights_state
-            self.priority_mode = priority_mode
-            self.priority_direction = priority_direction
+            self.priority_mode = priority_mode.value
+            self.priority_direction = priority_direction.value
 
       def change_normal_lights(self):
             if self.lights_state[0] == 1:
@@ -38,9 +38,11 @@ class Lights(Process):
             signal.signal(signal.SIGUSR1, self.handle_priority_signal)
 
             while True:
-                  if self.priority_mode:
-                        self.change_priority_lights()
-                  else:
-                        self.change_normal_lights()
-                        
-                  # Il faut implémenter le temps d'attente
+                if self.priority_mode:
+                    self.change_priority_lights()
+                else:
+                    self.change_normal_lights()
+                for _ in range(100):
+                    time.sleep(0.05)
+                    if self.priority_mode:
+                        break
