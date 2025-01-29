@@ -32,7 +32,8 @@ class Lights(Process):
                   case _: return None
 
 
-      handle_priority_signal = lambda self, sig, frame: self.priority_mode = True
+      def handle_priority_signal(self, sig, frame):
+            self.priority_mode = True
 
       def run(self):
             signal.signal(signal.SIGUSR1, self.handle_priority_signal)
