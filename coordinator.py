@@ -31,10 +31,11 @@ class Coordinator(Process):
                               return shuffle([value, passageQueue])
                         else:
                               if value[1] == 'R' : return [value, passageQueue[index+1]]
-                              if value[1] == 'S':
-                                    if passageQueue[index+1][1] == 'R':
-                                          return [passageQueue[index+1], value]
-                                    else:
-                                          return [value, passageQueue[index+1]]
-                              if value[1] == 'L':
-                                    ...
+                              if passageQueue[index+1] == 'R' : return [passageQueue[index+1], value]
+                              if value[1] == 'S': return [value, passageQueue[index+1]]
+                              if passageQueue[index+1] == 'S': return [passageQueue[index+1], value]
+                              if value[1] == 'L': return [value, passageQueue[index+1]]
+                              if passageQueue[index+1] == 'L': return [passageQueue[index+1], value]
+                              if value[1] == 'U': return [value, passageQueue[index+1]]
+                              if passageQueue[index+1] == 'U': return [passageQueue[index+1], value]
+                        
