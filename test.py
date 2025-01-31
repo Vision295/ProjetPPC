@@ -28,10 +28,14 @@ def run_server(host, port, ListQueue, maxsize, trafficLights):
             with conn:
                   print(f"Connected by {addr}")
                   message = format_queues(ListQueue, maxsize, trafficLights)
+                  message_length = len(message.encode())
                   conn.sendall(message.encode())
                   print(message) #pour tester
-                  
-MAXSIZE = 3
+                  print(message_length)
+
+MAXSIZE = 100
+HOST = 'localhost'
+PORT = 6666
 
 vehicleQueues = [
     Queue(MAXSIZE),
@@ -47,3 +51,6 @@ vehicleQueues[2].put("jkl")
 
 
 trafficLigthStates = Array('b', [1, 1, 1, 1])
+
+run_server(HOST, PORT, vehicleQueues, MAXSIZE, trafficLigthStates)
+
