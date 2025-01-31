@@ -6,12 +6,23 @@ from multiprocessing import Queue
 from utils import *
 
 
+
+"""
+Queue -> ["abc", "abc", ...] = MAXSIZE = 100
+queue1 = NRP
+queue2 = ERN
+"""
+
+
+
+
 class Display():
       
       
       def __init__(self, queues:list[Queue]):
             self.running = True
             self.screen = pygame.display.set_mode((700, 700))
+            self.queues = []
 
 
             self.clock = pygame.time.Clock()
@@ -28,7 +39,9 @@ class Display():
             while self.running:
                   
                   self.client_socket.sendall(m.encode())
-                  data = self.client_socket.recv(1024)
+
+                  self.queues
+                  queues = self.client_socket.recv(MAXSIZE * 4)
                   print("echo> ", data.decode())
                   m = input("message> ")
                   
