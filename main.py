@@ -5,6 +5,8 @@ from vehicleGen import VehicleGen
 from lights import Lights
 from coordinator import Coordinator
 from utils import *
+import os
+from time import sleep
 
 
 
@@ -31,6 +33,8 @@ if __name__ == "__main__":
 
       normal_traffic_gen = VehicleGen(vehicleQueues, False, lights)
       priority_traffic_gen = VehicleGen(vehicleQueues, True, lights)
+      
+      while not lights.is_alive() : sleep(0.1)
       
       normal_traffic_gen.start()
       priority_traffic_gen.start()

@@ -39,7 +39,8 @@ class VehicleGen(Process):
             if self.vehicle["priority"] == 'P':
                   self.lights_process.priority_direction.value = get_direction(self.vehicle["source"])
                   os.kill(self.lights_pid, signal.SIGUSR1)
-      
+                  
+                  
       def run(self): 
             while True:
                   self.generate_vehicle()  # Random source/destination
