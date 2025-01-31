@@ -2,7 +2,7 @@
 
 import pygame
 import socket
-from multiprocessing import Queue
+from multiprocessing import Process
 from utils import *
 
 
@@ -24,7 +24,7 @@ msg = \
 
 
 
-class Display():
+class Display(Process):
       
       
       def __init__(self):

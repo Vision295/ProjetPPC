@@ -8,6 +8,7 @@ from utils import *
 from time import sleep
 import socket
 import os
+from display import Display
 
 
 
@@ -49,7 +50,7 @@ if __name__ == "__main__":
             except:
                   pass
             
-            
+      display = Display()
 
       serialized_msg = "abc ".encode()
       print(f"Size of one message: {len(serialized_msg)} bytes")
