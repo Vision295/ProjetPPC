@@ -35,3 +35,32 @@ def peek(queue:Queue) -> Queue:
       val = temp[0]
       while temp: queue.put(temp.pop(0))
       return val
+
+def parse_message(msg: str) -> tuple[list[str], list[int]]:
+    """
+    Parse message string to extract queue contents and lights status
+    
+    Args:
+        msg (str): Input message in format "Q1: abc abc..., Q2: abc abc..., ..., L: 1 0 0 1"
+    
+    Returns:
+        tuple: (dict of queue lists, list of lights)
+            - queues: {'q1': [...], 'q2': [...], 'q3': [...], 'q4': [...]}
+            - lights: [1, 0, 0, 1]
+    """
+    # Split the message into parts
+    parts = msg.split(', ')
+    
+    # Initialize dictionary for queues
+    queues = {}
+    
+    # Process each queue (Q1 to Q4)
+    for i in range(1, 5):
+        queue_part = parts[i-1].split(': ')[1]  # Get part after "Qn: "
+        queues[f'q{i}'] = queue_part.strip().split()
+    
+    # Process lights
+    lights_part = parts[-1].split(': ')[1]  # Get part after "L: "
+    lights = [int(x) for x in lights_part.split()]
+    
+    return queues, lights
