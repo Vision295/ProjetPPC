@@ -69,64 +69,62 @@ class Display():
             
             # client
  
-            """
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as self.client_socket:
                   self.client_socket.connect((HOST, PORT))
-                  """
                   
-            while self.running:
+                  while self.running:
 
-                  """
-                  self.queues, self.lights = self.client_socket.recv(MAXSIZE * 4 * 4 + 39)
-                  """
-                  self.screen.blit(self.images["route"], (0, 0))
-                  self.screen.blit(self.images["fvv"], (275, 260))
-                  self.screen.blit(self.images["fvv"], (400, 390))
-                  self.screen.blit(self.images["fvh"], (275, 390))
-                  self.screen.blit(self.images["fvh"], (400, 270))
-                              
-                  
-                  
-                  self.vehicles_to_display = []
-                  offsets = [
-                        (351, 375),
-                        (390, 306),
-                        (320, 230),
-                        (220, 343)
-                  ]
+                        self.queues, self.lights = parse_message(self.client_socket.recv(MAXSIZE * 4 * 4 + 39))
 
-                  for index, value in enumerate(self.queues):
-                        for jndex, jvalue in enumerate(value[:3]):
-                              self.vehicles_to_display.append(
-                                    {
-                                          "pos": [offsets[index][0], offsets[index][1]],
-                                          "rotation": index * 90,
-                                          "prio": jvalue[2],
-                                    }
-                              )
-                              match index:
-                                    case 0 : self.vehicles_to_display[-1]["pos"][1] += 75 * jndex 
-                                    case 2 : self.vehicles_to_display[-1]["pos"][1] -= 75 * jndex 
-                                    case 1 : self.vehicles_to_display[-1]["pos"][0] += 75 * jndex 
-                                    case 3 : self.vehicles_to_display[-1]["pos"][0] -= 75 * jndex 
-                             
+
+                        self.screen.blit(self.images["route"], (0, 0))
+                        self.screen.blit(self.images["fvv"], (275, 260))
+                        self.screen.blit(self.images["fvv"], (400, 390))
+                        self.screen.blit(self.images["fvh"], (275, 390))
+                        self.screen.blit(self.images["fvh"], (400, 270))
+                                    
                         
-                  for vehicle in self.vehicles_to_display:
-                        self.screen.blit(
-                              pygame.transform.rotate(self.images[vehicle["prio"]], vehicle["rotation"]),
-                              vehicle["pos"]
-                        )
-                  
+                        
+                        self.vehicles_to_display = []
+                        offsets = [
+                              (351, 375),
+                              (390, 306),
+                              (320, 230),
+                              (220, 343)
+                        ]
 
-                  self.clock.tick(self.fps)
-                  
-                  
-                  pygame.display.flip()
-                  
-                  for even in pygame.event.get():
-                        if even.type == pygame.QUIT:
-                              pygame.quit()
-                              self.running = False
+                        for index, value in enumerate(self.queues):
+                              for jndex, jvalue in enumerate(value[:3]):
+                                    self.vehicles_to_display.append(
+                                          {
+                                                "pos": [offsets[index][0], offsets[index][1]],
+                                                "rotation": index * 90,
+                                                "prio": jvalue[2],
+                                          }
+                                    )
+                                    match index:
+                                          case 0 : self.vehicles_to_display[-1]["pos"][1] += 75 * jndex 
+                                          case 2 : self.vehicles_to_display[-1]["pos"][1] -= 75 * jndex 
+                                          case 1 : self.vehicles_to_display[-1]["pos"][0] += 75 * jndex 
+                                          case 3 : self.vehicles_to_display[-1]["pos"][0] -= 75 * jndex 
+                                   
+                              
+                        for vehicle in self.vehicles_to_display:
+                              self.screen.blit(
+                                    pygame.transform.rotate(self.images[vehicle["prio"]], vehicle["rotation"]),
+                                    vehicle["pos"]
+                              )
+                        
+
+                        self.clock.tick(self.fps)
+                        
+                        
+                        pygame.display.flip()
+                        
+                        for even in pygame.event.get():
+                              if even.type == pygame.QUIT:
+                                    pygame.quit()
+                                    self.running = False
       
 
 
