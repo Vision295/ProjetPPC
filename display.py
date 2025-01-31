@@ -1,5 +1,9 @@
+# display.py
+
 import pygame
+import socket
 from multiprocessing import Queue
+from utils import *
 
 
 class Display():
@@ -16,9 +20,17 @@ class Display():
             
       def run(self):
             
+            # client
+ 
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as self.client_socket:
+                  self.client_socket.connect((HOST, PORT))
+                  
             while self.running:
                   
-                  
+                  self.client_socket.sendall(m.encode())
+                  data = self.client_socket.recv(1024)
+                  print("echo> ", data.decode())
+                  m = input("message> ")
                   
                   pygame.display.flip()
                   

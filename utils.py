@@ -5,9 +5,12 @@ from random import random
 
 
 MAXSIZE = 100
+HOST = "localhost"
+PORT = 6666
+
+
 
 random_sleep_time = lambda param: random() * param
-
 
 def get_direction(source):
       match source:
@@ -22,8 +25,6 @@ get_queue = lambda s, queues : queues[get_direction(s)]
 
 def get_queue(source:str, queues:list) -> Queue:
       return queues[get_direction(source)]
-
-
 
 def peek(queue:Queue) -> Queue:
       try:
