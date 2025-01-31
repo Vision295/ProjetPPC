@@ -89,14 +89,14 @@ class Display():
                   
                   self.vehicles_to_display = []
                   offsets = [
-                        (350, 375),
-                        (380, 293),
-                        (340, 245),
+                        (351, 375),
+                        (390, 306),
+                        (320, 230),
                         (220, 343)
                   ]
 
                   for index, value in enumerate(self.queues):
-                        for jndex, jvalue in enumerate(value[:4]):
+                        for jndex, jvalue in enumerate(value[:3]):
                               self.vehicles_to_display.append(
                                     {
                                           "pos": [offsets[index][0], offsets[index][1]],

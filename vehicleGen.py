@@ -17,7 +17,7 @@ class VehicleGen(Process):
             self.queues = queues
             self.vehicle_priority_gen = priority
             
-            self.timeToWait = 20 if self.vehicle_priority_gen else 5
+            self.timeToWait = 10 if self.vehicle_priority_gen else 2
             
                   
             self.lights_process = lights_process
@@ -53,5 +53,5 @@ class VehicleGen(Process):
                   )
                   queue = get_queue(self.vehicle['source'], self.queues)  # Select appropriate queue
                   queue.put(self.vehicle['source'] + self.vehicle['dest'] + self.vehicle["priority"])  # Add vehicle to queue
-                  sleep(random_sleep_time(self.timeToWait))
+                  sleep(self.timeToWait)
       
