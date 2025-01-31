@@ -28,8 +28,9 @@ if __name__ == "__main__":
       priority_mode = Value('b', False)
       priority_direction = Value('b', -1)
 
-      run_server(HOST, PORT, vehicleQueues, MAXSIZE, trafficLigthStates)
-      
+      server_process = Process(target=run_server, args=(host, port, ListQueue, maxsize, trafficLights))
+      server_process.start()
+      print("Server process started.")
 
       lights = Lights(trafficLigthStates, priority_mode, priority_direction, lock)
       lights.start()
