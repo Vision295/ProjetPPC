@@ -2,6 +2,7 @@
 
 from multiprocessing import Queue
 from random import random
+import socket
 
 
 MAXSIZE = 100
@@ -35,3 +36,33 @@ def peek(queue:Queue) -> Queue:
       val = temp[0]
       while temp: queue.put(temp.pop(0))
       return val
+
+def format_queues(ListQueue, maxsize, trafficLights):
+      result = []
+      for i, q in enumerate(ListQueue):
+            items = []
+            while not q.empty():
+                  items.append(q.get())
+            for item in items : 
+                  q.put(item)
+            padded_items = items + ["xxx"] * (maxsize - len(items))
+            result.append(f"Q{i+1} : {' '.join(padded_items)}")
+      
+      traffic_light_str = "L : " + " ".join(map(str, trafficLights[:]))  # Convert Array to string
+      result.append(traffic_light_str)
+      return " , ".join(result)
+
+def run_server(host, port, ListQueue, maxsize, trafficLights):
+      HOST, PORT = host, port
+      server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+      server_socket.bind((HOST, PORT))    
+      server_socket.listen()
+      print(f"Server listening on {HOST}:{PORT}")
+
+      while True:
+            conn, addr = server_socket.accept() 
+            with conn:
+                  print(f"Connected by {addr}")
+                  message = format_queues(ListQueue, maxsize, trafficLights)
+                  conn.sendall(message.encode())
+                  print(message) #pour tester

@@ -25,6 +25,8 @@ if __name__ == "__main__":
       trafficLigthStates = Array('b', [1, 1, 1, 1])
       priority_mode = Value('b', False)
       priority_direction = Value('b', -1)
+
+      run_server(HOST, PORT, vehicleQueues, MAXSIZE, trafficLigthStates)
       
 
       lights = Lights(trafficLigthStates, priority_mode, priority_direction)
@@ -47,9 +49,7 @@ if __name__ == "__main__":
                   pass
             
             
-      server = Server()
-      while server.conneciton_ip:
-            server.send_data()
+
 
       serialized_msg = pickle.dumps("abc")
       print(f"Size of one message: {len(serialized_msg)} bytes")
