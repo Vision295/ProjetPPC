@@ -1,6 +1,6 @@
 # main.py
 
-from multiprocessing import Queue, Array, Value, Process
+from multiprocessing import Queue, Array, Value, Process, Lock
 from vehicleGen import VehicleGen
 from lights import Lights
 from coordinator import Coordinator
@@ -13,6 +13,8 @@ import os
 
 
 if __name__ == "__main__":
+
+      lock = Lock()
 
       vehicleQueues = [
             Queue(MAXSIZE),
@@ -28,10 +30,10 @@ if __name__ == "__main__":
       run_server(HOST, PORT, vehicleQueues, MAXSIZE, trafficLigthStates)
       
 
-      lights = Lights(trafficLigthStates, priority_mode, priority_direction)
+      lights = Lights(trafficLigthStates, priority_mode, priority_direction, lock)
       lights.start()
       
-      coordinator = Coordinator(vehicleQueues, trafficLigthStates, priority_mode)
+      coordinator = Coordinator(vehicleQueues, trafficLigthStates, priority_mode, lock)
       coordinator.start()
 
       normal_traffic_gen = VehicleGen(vehicleQueues, False, lights)

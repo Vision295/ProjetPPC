@@ -1,6 +1,6 @@
 # coordinator.py
 
-from multiprocessing import Process, Queue
+from multiprocessing import Process, Queue, Lock
 from multiprocessing.sharedctypes import Array, Value
 from random import shuffle
 from utils import *
@@ -10,11 +10,12 @@ from time import sleep
 
 class Coordinator(Process):
       
-      def __init__(self, queues:list[Queue], lights_array:Array, priority_mode:Value):
+      def __init__(self, queues:list[Queue], lights_array:Array, priority_mode:Value, lock:Lock):
             super().__init__()
             self.lights_array = lights_array
             self.queues = queues
             self.priority_mode = priority_mode
+            self.lock = lock
 
       def run(self): 
             """without any rules : everyone passes when he can"""
@@ -30,7 +31,8 @@ class Coordinator(Process):
                         next_to_go = passageOrder.pop(0)
 
                         if self.queues[get_direction(next_to_go[0])].get()[2] == "P":
-                              self.priority_mode.value = False
+                              with self.lock:
+                                    self.priority_mode.value = False
                         else:
                               self.queues[get_direction(next_to_go[0])].get()
                               
