@@ -8,7 +8,6 @@ from utils import *
 from time import sleep
 import socket
 import os
-import pickle
 
 
 
@@ -50,7 +49,12 @@ if __name__ == "__main__":
             
             
 
-
-      serialized_msg = pickle.dumps("abc")
+      serialized_msg = "abc ".encode()
       print(f"Size of one message: {len(serialized_msg)} bytes")
       print(f"Total size for 100 messages: {len(serialized_msg) * 100} bytes")
+
+      """
+      server = Server()
+      while server.conneciton_ip:
+            server.send_data()
+            """
