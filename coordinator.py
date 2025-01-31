@@ -10,7 +10,7 @@ from time import sleep
 
 class Coordinator(Process):
       
-      def __init__(self, queues:list[Queue], lights_array:Array, priority_mode:Value, lock:Lock):
+      def __init__(self, queues:list[Queue], lights_array:Array, priority_mode:Value, lock):
             super().__init__()
             self.lights_array = lights_array
             self.queues = queues

@@ -10,7 +10,7 @@ from multiprocessing.sharedctypes import Array, Value
 class Lights(Process):
 
 
-      def __init__(self, lights_state:Array, priority_mode:Value, priority_direction:Value, lock:Lock) -> None:
+      def __init__(self, lights_state:Array, priority_mode:Value, priority_direction:Value, lock) -> None:
             # il faut enlever priority_mode
             super().__init__()
             self.lights_state = lights_state
