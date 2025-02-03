@@ -28,7 +28,7 @@ if __name__ == "__main__":
       priority_mode = Value('b', False)
       priority_direction = Value('b', -1)
 
-      server_process = Process(target=run_server, args=(host, port, ListQueue, maxsize, trafficLights))
+      server_process = Process(target=run_server, args=(HOST, PORT, vehicleQueues, MAXSIZE, trafficLigthStates))
       server_process.start()
       print("Server process started.")
 
@@ -52,6 +52,7 @@ if __name__ == "__main__":
                   pass
             
       display = Display()
+      display.start()
 
       serialized_msg = "abc ".encode()
       print(f"Size of one message: {len(serialized_msg)} bytes")

@@ -6,7 +6,7 @@ import socket
 
 
 MAXSIZE = 100
-HOST = "localhost"
+HOST = 'localhost'
 PORT = 6666
 
 
@@ -67,31 +67,37 @@ def run_server(host, port, ListQueue, maxsize, trafficLights):
                   conn.sendall(message.encode())
                   print(message) #pour tester
                   
-def parse_message(msg: str) -> tuple[list[str], list[int]]:
-    """
-    Parse message string to extract queue contents and lights status
-    
-    Args:
-        msg (str): Input message in format "Q1: abc abc..., Q2: abc abc..., ..., L: 1 0 0 1"
-    
-    Returns:
-        tuple: (dict of queue lists, list of lights)
-            - queues: {'q1': [...], 'q2': [...], 'q3': [...], 'q4': [...]}
-            - lights: [1, 0, 0, 1]
-    """
-    # Split the message into parts
-    parts = msg.split(', ')
-    
-    # Initialize dictionary for queues
-    queues = {}
-    
-    # Process each queue (Q1 to Q4)
-    for i in range(1, 5):
-        queue_part = parts[i-1].split(': ')[1]  # Get part after "Qn: "
-        queues[f'q{i}'] = queue_part.strip().split()
-    
-    # Process lights
-    lights_part = parts[-1].split(': ')[1]  # Get part after "L: "
-    lights = [int(x) for x in lights_part.split()]
-    
-    return queues, lights
+                  
+                  
+                  
+def parse_message(msg: str):
+      """
+      Parse message string to extract queue contents (excluding 'xxx' format strings) and lights status
+
+      Args:
+      msg (str): Input message in format "Q1: abc abc..., Q2: abc abc..., ..., L: 1 0 0 1"
+
+      Returns:
+      tuple: (dict of queue lists, list of lights)
+      - queues: {'q1': [...], 'q2': [...], 'q3': [...], 'q4': [...]}
+      - lights: [1, 0, 0, 1]
+      """
+      # Split the message into parts
+      parts = msg.split(', ')
+
+      # Initialize dictionary for queues
+      queues = {'q1': [], 'q2': [], 'q3': [], 'q4': []}
+
+      # Process each queue (Q1 to Q4)
+      for i in range(1, 5):
+            queue_part = parts[i-1].split(': ')[1]  # Get part after "Qn: "
+            # Only add items that are not in the format "xxx"
+            for item in queue_part.strip().split():
+                  if not (len(item) == 3 and item[0] == item[1] == item[2]):
+                        queues[f'q{i}'].append(item)
+
+      # Process lights
+      lights_part = parts[-1].split(': ')[1]  # Get part after "L: "
+      lights = [int(x) for x in lights_part.split()]
+
+      return queues, lights

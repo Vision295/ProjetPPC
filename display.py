@@ -28,6 +28,7 @@ class Display(Process):
       
       
       def __init__(self):
+            super().__init__()
             self.running = True
             self.window_size = 700
             self.screen = pygame.display.set_mode((self.window_size, self.window_size))
@@ -74,7 +75,7 @@ class Display(Process):
                   
                   while self.running:
 
-                        self.queues, self.lights = parse_message(self.client_socket.recv(MAXSIZE * 4 * 4 + 39))
+                        self.queues, self.lights = parse_message(self.client_socket.recv(MAXSIZE * 4 * 4 + 39).decode())
 
 
                         self.screen.blit(self.images["route"], (0, 0))
@@ -93,7 +94,8 @@ class Display(Process):
                               (220, 343)
                         ]
 
-                        for index, value in enumerate(self.queues):
+                        print(self.queues)
+                        for index, value in enumerate(self.queues.values()):
                               for jndex, jvalue in enumerate(value[:3]):
                                     self.vehicles_to_display.append(
                                           {
@@ -127,6 +129,3 @@ class Display(Process):
                                     self.running = False
       
 
-
-display = Display()
-display.run()
