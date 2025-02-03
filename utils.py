@@ -67,7 +67,6 @@ def run_server(host, port, ListQueue, maxsize, trafficLights):
                         print(f"Connected by {addr}")
                         message = format_queues(ListQueue, maxsize, trafficLights)
                         conn.sendall(message.encode())
-                        print(message) #pour tester
       except KeyboardInterrupt:
             print("\nShutting down server")
       finally: 
@@ -75,6 +74,10 @@ def run_server(host, port, ListQueue, maxsize, trafficLights):
             print("Port released. Exiting.")
             sys.exit(0)
             
+<<<<<<< HEAD
+=======
+            
+>>>>>>> 6e61f4ddb64f96f54dbdde41975ee133c9a81621
 def parse_message(msg: str) -> tuple[list[str], list[int]]:
     """
     Parse message string to extract queue contents and lights status

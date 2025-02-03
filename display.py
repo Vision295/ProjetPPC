@@ -95,21 +95,22 @@ class Display(Process):
                               (220, 343)
                         ]
 
-                        print(self.queues)
                         for index, value in enumerate(self.queues.values()):
                               for jndex, jvalue in enumerate(value[:3]):
-                                    self.vehicles_to_display.append(
-                                          {
-                                                "pos": [offsets[index][0], offsets[index][1]],
-                                                "rotation": index * 90,
-                                                "prio": jvalue[2],
-                                          }
-                                    )
-                                    match index:
-                                          case 0 : self.vehicles_to_display[-1]["pos"][1] += 75 * jndex 
-                                          case 2 : self.vehicles_to_display[-1]["pos"][1] -= 75 * jndex 
-                                          case 1 : self.vehicles_to_display[-1]["pos"][0] += 75 * jndex 
-                                          case 3 : self.vehicles_to_display[-1]["pos"][0] -= 75 * jndex 
+                                    
+                                    if jvalue != "xxx":
+                                          self.vehicles_to_display.append(
+                                                {
+                                                      "pos": [offsets[index][0], offsets[index][1]],
+                                                      "rotation": index * 90,
+                                                      "prio": jvalue[2],
+                                                }
+                                          )
+                                          match index:
+                                                case 0 : self.vehicles_to_display[-1]["pos"][1] += 75 * jndex 
+                                                case 2 : self.vehicles_to_display[-1]["pos"][1] -= 75 * jndex 
+                                                case 1 : self.vehicles_to_display[-1]["pos"][0] += 75 * jndex 
+                                                case 3 : self.vehicles_to_display[-1]["pos"][0] -= 75 * jndex 
                                    
                               
                         for vehicle in self.vehicles_to_display:
