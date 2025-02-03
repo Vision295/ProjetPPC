@@ -48,18 +48,19 @@ class Coordinator(Process):
                   if passageQueue[1] == "P": return passageQueue[::-1]
                   # value is type Source + Destination + Priority for example : "NUN" for North Up Normal
                   for index, value in enumerate(passageQueue):
-                        print(passageQueue)
-                        if value[1] == passageQueue[index+1][1]:
-                              return shuffle([value, passageQueue])
-                        else:
-                              # R = Right, S = Straight, L = Left, U = U-Turn
-                              if value[1] == 'R' :                return [value, passageQueue[index+1]]
-                              if passageQueue[index+1] == 'R' :   return [passageQueue[index+1], value]
-                              if value[1] == 'S':                 return [value, passageQueue[index+1]]
-                              if passageQueue[index+1] == 'S':    return [passageQueue[index+1], value]
-                              if value[1] == 'L':                 return [value, passageQueue[index+1]]
-                              if passageQueue[index+1] == 'L':    return [passageQueue[index+1], value]
-                              if value[1] == 'U':                 return [value, passageQueue[index+1]]
-                              if passageQueue[index+1] == 'U':    return [passageQueue[index+1], value]
+                        if index + 1 < len(passageQueue):
+                              print(passageQueue)
+                              if value[1] == passageQueue[index+1][1]:
+                                    return shuffle([value, passageQueue])
+                              else:
+                                    # R = Right, S = Straight, L = Left, U = U-Turn
+                                    if value[1] == 'R' :                return [value, passageQueue[index+1]]
+                                    if passageQueue[index+1] == 'R' :   return [passageQueue[index+1], value]
+                                    if value[1] == 'S':                 return [value, passageQueue[index+1]]
+                                    if passageQueue[index+1] == 'S':    return [passageQueue[index+1], value]
+                                    if value[1] == 'L':                 return [value, passageQueue[index+1]]
+                                    if passageQueue[index+1] == 'L':    return [passageQueue[index+1], value]
+                                    if value[1] == 'U':                 return [value, passageQueue[index+1]]
+                                    if passageQueue[index+1] == 'U':    return [passageQueue[index+1], value]
             else:
                   return []
