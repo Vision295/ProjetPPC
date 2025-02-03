@@ -74,6 +74,7 @@ def run_server(host, port, ListQueue, maxsize, trafficLights):
             server_socket.close()
             print("Port released. Exiting.")
             sys.exit(0)
+            
 def parse_message(msg: str) -> tuple[list[str], list[int]]:
     """
     Parse message string to extract queue contents and lights status
