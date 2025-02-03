@@ -66,6 +66,7 @@ def run_server(host, port, ListQueue, maxsize, trafficLights):
                   message = format_queues(ListQueue, maxsize, trafficLights)
                   conn.sendall(message.encode())
                   print(message) #pour tester
+                  
 def parse_message(msg: str) -> tuple[list[str], list[int]]:
     """
     Parse message string to extract queue contents and lights status
