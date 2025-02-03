@@ -29,6 +29,7 @@ class Display(Process):
       
       def __init__(self):
             super().__init__()
+            pygame.init()
             self.running = True
             self.window_size = 700
             self.screen = pygame.display.set_mode((self.window_size, self.window_size))

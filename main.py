@@ -13,6 +13,7 @@ from display import Display
 
 
 
+
 if __name__ == "__main__":
 
       lock = Lock()
@@ -31,6 +32,7 @@ if __name__ == "__main__":
       server_process = Process(target=run_server, args=(HOST, PORT, vehicleQueues, MAXSIZE, trafficLigthStates))
       server_process.start()
       print("Server process started.")
+      sleep(10)
 
       lights = Lights(trafficLigthStates, priority_mode, priority_direction, lock)
       lights.start()
