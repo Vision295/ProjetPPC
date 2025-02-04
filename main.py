@@ -25,7 +25,7 @@ if __name__ == "__main__":
             Queue(MAXSIZE)
       ]
 
-      trafficLigthStates = Array('b', [1, 1, 1, 1])
+      trafficLigthStates = Array('b', [0, 0, 0, 0])
       priority_mode = Value('b', False)
       priority_direction = Value('b', -1)
 
