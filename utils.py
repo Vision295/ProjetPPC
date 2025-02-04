@@ -4,6 +4,7 @@ from multiprocessing import Queue
 from random import random
 import socket
 import sys
+import time
 
 
 MAXSIZE = 100
@@ -61,12 +62,15 @@ def run_server(host, port, ListQueue, maxsize, trafficLights):
             server_socket.listen()
             print(f"Server listening on {HOST}:{PORT}")
 
-            while True:
-                  conn, addr = server_socket.accept() 
-                  with conn:
-                        print(f"Connected by {addr}")
+            conn, addr = server_socket.accept() 
+            with conn:
+                  print(f"Connected by {addr}")
+
+                  while True: 
                         message = format_queues(ListQueue, maxsize, trafficLights)
                         conn.sendall(message.encode())
+                        time.sleep(1)
+                        
       except KeyboardInterrupt:
             print("\nShutting down server")
       finally: 
