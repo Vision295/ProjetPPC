@@ -5,11 +5,12 @@ from random import random
 import socket
 import sys
 import time
+import re
 
 
-MAXSIZE = 100
+MAXSIZE = 1000
 HOST = 'localhost'
-PORT = 6666
+PORT = 6662
 
 
 
@@ -77,33 +78,59 @@ def run_server(host, port, ListQueue, maxsize, trafficLights):
             server_socket.close()
             print("Port released. Exiting.")
             sys.exit(0)
-            
-def parse_message(msg: str) -> tuple[list[str], list[int]]:
+
+
+def parse_message(msg: str) -> tuple[dict[str, list[str]], list[int]]:
     """
-    Parse message string to extract queue contents and lights status
+    Parse message string to extract queue contents (excluding 'xxx') and lights status with error handling.
     
     Args:
-        msg (str): Input message in format "Q1: abc abc..., Q2: abc abc..., ..., L: 1 0 0 1"
+        msg (str): Input message in format "Q1: content, Q2: content, ..., L: lights"
     
     Returns:
-        tuple: (dict of queue lists, list of lights)
-            - queues: {'q1': [...], 'q2': [...], 'q3': [...], 'q4': [...]}
-            - lights: [1, 0, 0, 1]
+        tuple: (dict of queues, list of lights)
     """
-    # Split the message into parts
-    parts = msg.split(', ')
-    
-    # Initialize dictionary for queues
-    queues = {}
-    
-    # Process each queue (Q1 to Q4)
-    for i in range(1, 5):
-        print(i)
-        queue_part = parts[i-1].split(': ')[1]  # Get part after "Qn: "
-        queues[f'q{i}'] = queue_part.strip().split()
-    
-    # Process lights
-    lights_part = parts[-1].split(': ')[1]  # Get part after "L: "
-    lights = [int(x) for x in lights_part.split()]
-    
-    return queues, lights
+    try:
+        # Debug the received message
+        if not msg:
+            raise ValueError("Empty message received")
+
+        # Split the message into parts
+        parts = msg.split(', ')
+
+        
+        if len(parts) < 5:  # We need at least 4 queues and lights
+            raise ValueError(f"Message has incorrect number of parts: {len(parts)}")
+
+        # Initialize dictionary for queues
+        queues = {}
+
+        # Process each queue (Q1 to Q4)
+        for i in range(1, 5):
+            if not parts[i-1].startswith(f"Q{i}"):
+                raise ValueError(f"Invalid queue format for Q{i}: {parts[i-1]}")
+            
+            try:
+                queue_part = parts[i-1].split(': ')[1]
+                filtered_queue = [word for word in queue_part.strip().split() if word != "xxx"]
+                queues[f'q{i}'] = filtered_queue
+            except IndexError:
+                print(f"Error processing Q{i}: {parts[i-1]}")
+                queues[f'q{i}'] = []  # Empty list as fallback
+
+        # Process lights
+        try:
+            lights_part = parts[-1].split(': ')[1]
+            lights = [int(x) for x in lights_part.split()]
+            if len(lights) != 4:
+                raise ValueError(f"Invalid number of lights: {len(lights)}")
+        except (IndexError, ValueError) as e:
+            print(f"Error processing lights: {parts[-1]}")
+            lights = [0, 0, 0, 0]  # Default lights as fallback
+
+        return queues, lights
+
+    except Exception as e:
+        print(f"Error parsing message: {e}")
+        # Return empty defaults in case of any error
+        return {'q1': [], 'q2': [], 'q3': [], 'q4': []}, [0, 0, 0, 0]

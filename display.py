@@ -33,7 +33,7 @@ class Display():
             self.running = True
             self.window_size = 700
             self.screen = pygame.display.set_mode((self.window_size, self.window_size))
-            self.queues:list[str] = [] 
+            self.queues:dict[str] = {} 
             self.lights:list[int] = []
             self.queues = [
                   ['EUP', 'WLN', 'WLN', 'ELP', 'WUP', 'NSP', 'SSP', 'ESP', 'NSN', 'NSN'],
@@ -75,15 +75,35 @@ class Display():
                   self.client_socket.connect((HOST, PORT))
                   
                   while self.running:
+                        
+                        recived = self.client_socket.recv(MAXSIZE * 4 * 4 + 39)
 
-                        self.queues, self.lights = parse_message(self.client_socket.recv(MAXSIZE * 4 * 4 + 39).decode())
+                        if recived:
+                              try:
+                                    self.queues, self.lights = parse_message(recived.decode())
+                              except:
+                                    pass
+                              
+                              
+                        print(self.queues)
 
 
                         self.screen.blit(self.images["route"], (0, 0))
-                        self.screen.blit(self.images["fvv"], (275, 260))
-                        self.screen.blit(self.images["fvv"], (400, 390))
-                        self.screen.blit(self.images["fvh"], (275, 390))
-                        self.screen.blit(self.images["fvh"], (400, 270))
+                        
+                        
+                        lights_pos_on_screen = [
+                              (275, 260),
+                              (400, 390),     
+                              (275, 390),      
+                              (400, 270)      
+                        ]
+                        if self.lights:
+                              for i, v in enumerate(self.lights):
+                                    if v == 0 and i % 2 == 0:     self.screen.blit(self.images["frv"], lights_pos_on_screen[i])
+                                    elif v == 1 and i % 2 == 0:   self.screen.blit(self.images["fvv"], lights_pos_on_screen[i])
+                                    elif v == 0 and i % 2 == 1:    self.screen.blit(self.images["frh"], lights_pos_on_screen[i])
+                                    elif v == 1 and i % 2 == 1:    self.screen.blit(self.images["fvh"], lights_pos_on_screen[i])
+                                               
                                     
                         
                         
