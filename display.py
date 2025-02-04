@@ -92,9 +92,9 @@ class Display():
                         
                         
                         lights_pos_on_screen = [
-                              (275, 260),
                               (400, 390),     
                               (275, 390),      
+                              (275, 260),
                               (400, 270)      
                         ]
                         if self.lights:
@@ -103,8 +103,6 @@ class Display():
                                     elif v == 1 and i % 2 == 0:   self.screen.blit(self.images["fvv"], lights_pos_on_screen[i])
                                     elif v == 0 and i % 2 == 1:    self.screen.blit(self.images["frh"], lights_pos_on_screen[i])
                                     elif v == 1 and i % 2 == 1:    self.screen.blit(self.images["fvh"], lights_pos_on_screen[i])
-                                               
-                                    
                         
                         
                         self.vehicles_to_display = []
