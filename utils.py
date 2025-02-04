@@ -94,6 +94,7 @@ def parse_message(msg: str) -> tuple[list[str], list[int]]:
     
     # Process each queue (Q1 to Q4)
     for i in range(1, 5):
+        print(i)
         queue_part = parts[i-1].split(': ')[1]  # Get part after "Qn: "
         queues[f'q{i}'] = queue_part.strip().split()
     

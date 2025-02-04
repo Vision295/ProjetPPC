@@ -54,11 +54,8 @@ if __name__ == "__main__":
                   pass
             
       display = Display()
-      display.start()
+      display.run()
 
-      serialized_msg = "abc ".encode()
-      print(f"Size of one message: {len(serialized_msg)} bytes")
-      print(f"Total size for 100 messages: {len(serialized_msg) * 100} bytes")
 
       """
       server = Server()

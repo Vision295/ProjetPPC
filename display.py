@@ -24,7 +24,7 @@ msg = \
 
 
 
-class Display(Process):
+class Display():
       
       
       def __init__(self):
