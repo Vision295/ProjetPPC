@@ -20,6 +20,8 @@ class Coordinator(Process):
       def run(self): 
             """without any rules : everyone passes when he can"""
             while True:
+
+                  print("lights : ", self.priority_mode.value)
                   passageQueue = []
                   for index, light in enumerate(self.lights_array):
                         if light and not self.queues[index].empty():
@@ -27,6 +29,7 @@ class Coordinator(Process):
                   
                   print("before : ", passageQueue)
                   passageOrder = self.getPassageOrder(passageQueue)
+
                   if passageOrder:
                         next_to_go = passageOrder.pop(0)
 
@@ -35,9 +38,9 @@ class Coordinator(Process):
                                     self.priority_mode.value = False
                         else:
                               self.queues[get_direction(next_to_go[0])].get()
+                        sleep(0.25)
                               
                   print("after : ", passageQueue)
-                  sleep(0.25)
                   
 
       def getPassageOrder(self, passageQueue:list[str]) -> list[str]:

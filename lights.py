@@ -7,6 +7,7 @@ from multiprocessing.sharedctypes import Array, Value
 
 
 
+
 class Lights(Process):
 
 
@@ -26,10 +27,10 @@ class Lights(Process):
 
       def change_priority_lights(self):
             match self.priority_direction.value: 
-                  case 0 : self.lights_state[:] = [1,0,1,0]
-                  case 1 : self.lights_state[:] = [0,1,0,1]
-                  case 2 : self.lights_state[:] = [1,0,1,0]
-                  case 3 : self.lights_state[:] = [0,1,0,1]
+                  case 0 : self.lights_state[:] = [0,0,1,0]
+                  case 1 : self.lights_state[:] = [0,0,0,1]
+                  case 2 : self.lights_state[:] = [1,0,0,0]
+                  case 3 : self.lights_state[:] = [0,1,0,0]
                   case _: return None
 
 
@@ -41,11 +42,12 @@ class Lights(Process):
             signal.signal(signal.SIGUSR1, self.handle_priority_signal)
 
             while True:
-                if self.priority_mode:
-                    self.change_priority_lights()
-                else:
-                    self.change_normal_lights()
-                for _ in range(100):
-                    time.sleep(0.05)
-                    if self.priority_mode:
-                        break
+                  print("lights : ", self.priority_mode.value)
+                  if self.priority_mode.value:
+                        self.change_priority_lights()
+                  else:
+                        self.change_normal_lights()
+                        for _ in range(100):
+                              time.sleep(0.05)
+                              if self.priority_mode.value:
+                                    break

@@ -70,7 +70,7 @@ def run_server(host, port, ListQueue, maxsize, trafficLights):
                   while True: 
                         message = format_queues(ListQueue, maxsize, trafficLights)
                         conn.sendall(message.encode())
-                        time.sleep(1)
+                        time.sleep(0.25)
                         
       except KeyboardInterrupt:
             print("\nShutting down server")
