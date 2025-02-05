@@ -10,19 +10,20 @@ from time import sleep
 
 class Coordinator(Process):
       
-      def __init__(self, queues:list[Queue], lights_array:Array, priority_mode:Value, lock):
+      def __init__(self, queues:list[Queue], lights_array:Array, priority_list:list, lock, priority_direction_list:list):
             super().__init__()
             self.lights_array = lights_array
             self.queues = queues
-            self.priority_mode = priority_mode
+            self.priority_list = priority_list
             self.lock = lock
-
+            self.priority_direction_list=priority_direction_list
+            
       def run(self): 
             """without any rules : everyone passes when he can"""
             while True:
 
                   sleep(0.25)
-                  print("coordinator : ", self.priority_mode.value)
+                  print("coordinator : ", self.priority_list)
                   passageQueue = []
                   for index, light in enumerate(self.lights_array):
                         if light and not self.queues[index].empty():
@@ -36,7 +37,8 @@ class Coordinator(Process):
 
                         with self.lock:
                               if self.queues[get_direction(next_to_go[0])].get()[2] == "P":
-                                          self.priority_mode.value = False
+                                          self.priority_list.pop(0)
+                                          self.priority_direction_list.pop(0)
                         sleep(0.25)
                               
                   #print("after : ", passageQueue)

@@ -9,6 +9,7 @@ from utils import *
 import signal
 import os
 
+
 ## @class VehicleGen
 #  @brief Generates vehicles and adds them to the traffic queues.
 #  
@@ -20,7 +21,7 @@ class VehicleGen(Process):
       #  @param priority Boolean indicating if this generator creates priority vehicles.
       #  @param lights_process A reference to the traffic light process used to get it's pid and be able to send it a signal     
 
-      def __init__(self, queues:list[Queue], priority:bool, lights_process:Lights):
+      def __init__(self, queues:list[Queue], priority:bool, lights_process:Lights, priority_direction_list:list):
             super().__init__()
 
             self.queues = queues
@@ -28,7 +29,7 @@ class VehicleGen(Process):
             
             self.timeToWait = 10 if self.vehicle_priority_gen else 2
             
-                  
+            self.priority_direction_list = priority_direction_list
             self.lights_process = lights_process
             try:
                   self.lights_pid:int = self.lights_process.pid
@@ -49,7 +50,9 @@ class VehicleGen(Process):
                   "priority": 'P' if self.vehicle_priority_gen else 'N' 
             }
             if self.vehicle["priority"] == 'P':
-                  self.lights_process.priority_direction.value = get_direction(self.vehicle["source"])
+                  self.priority_direction_list.append(get_direction(self.vehicle["source"]))
+
+                  #self.lights_process.priority_direction.value = get_direction(self.vehicle["source"])
                   os.kill(self.lights_pid, signal.SIGUSR1)
 
       ## @brief Runs the vehicle generation process.
