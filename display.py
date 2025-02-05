@@ -85,8 +85,8 @@ class Display():
                                     pass
                               
                               
-                        print(self.queues)
-                        print("lights : ", self.lights)
+                        #print(self.queues)
+                        #print("lights : ", self.lights)
 
 
                         self.screen.blit(self.images["route"], (0, 0))

@@ -21,26 +21,25 @@ class Coordinator(Process):
             """without any rules : everyone passes when he can"""
             while True:
 
-                  print("lights : ", self.priority_mode.value)
+                  sleep(0.25)
+                  print("coordinator : ", self.priority_mode.value)
                   passageQueue = []
                   for index, light in enumerate(self.lights_array):
                         if light and not self.queues[index].empty():
                               passageQueue.append(peek(self.queues[index]))
                   
-                  print("before : ", passageQueue)
+                  #print("before : ", passageQueue)
                   passageOrder = self.getPassageOrder(passageQueue)
 
                   if passageOrder:
                         next_to_go = passageOrder.pop(0)
 
-                        if self.queues[get_direction(next_to_go[0])].get()[2] == "P":
-                              with self.lock:
-                                    self.priority_mode.value = False
-                        else:
-                              self.queues[get_direction(next_to_go[0])].get()
+                        with self.lock:
+                              if self.queues[get_direction(next_to_go[0])].get()[2] == "P":
+                                          self.priority_mode.value = False
                         sleep(0.25)
                               
-                  print("after : ", passageQueue)
+                  #print("after : ", passageQueue)
                   
 
       def getPassageOrder(self, passageQueue:list[str]) -> list[str]:

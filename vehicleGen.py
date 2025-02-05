@@ -59,13 +59,13 @@ class VehicleGen(Process):
       def run(self): 
             while True:
                   self.generate_vehicle()  # Random source/destination
-                  print(
+                  """print(
                         "Priority" if self.vehicle_priority_gen else "Normal", 
                         "vehicle is being added to the queue \n\tsource : ",
                         self.vehicle['source'],
                         "\n\tdestination : ",
                         self.vehicle['dest']
-                  )
+                  )"""
                   queue = get_queue(self.vehicle['source'], self.queues)  # Select appropriate queue
                   if queue.full():  # Check if the queue is full
                         print("Queue is full! Vehicle cannot be added.")
