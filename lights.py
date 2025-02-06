@@ -51,14 +51,20 @@ class Lights(Process):
 
       def run(self):
             signal.signal(signal.SIGUSR1, self.handle_priority_signal)
-
+            incr = 0
             while True:
-                  #print("lights : ", self.priority_mode_array)
+                  if incr == 100:
+                        ### test if light changes regularly 
+                        # print("lights just changed !")
+                        incr = 0
+                        self.change_normal_lights()
+            
                   if (self.priority_mode_array[0]==1):
                         self.change_priority_lights()
                   else:
                         self.change_normal_lights()
                         for _ in range(100):
+                              incr += 1
                               time.sleep(TIMERS["lightDuration"])
                               if (self.priority_mode_array[0]==1):
                                     break

@@ -40,7 +40,7 @@ class Coordinator(Process):
 
                         with self.lock:
                               ##print(self.queues[get_direction(next_to_go[0])].receive()[0].decode()[2])
-                              if self.queues[get_direction(next_to_go[0])].receive()[0].decode()[2] == "P":
+                              if self.queues[get_direction(next_to_go[0])].receive(block=False)[0].decode()[2] == "P":
                                     print("coordinator",  self.priority_mode_array[0],  self.priority_mode_array[1],  self.priority_mode_array[2],  self.priority_mode_array[3])
                                     shift_array_remove(self.priority_mode_array, 0)
                                     shift_array_remove(self.priority_direction_array, 0)
@@ -53,14 +53,16 @@ class Coordinator(Process):
             """gets a passage Queue and returns the same queue sorted"""
             if len(passageQueue) == 1 : return passageQueue
             elif len(passageQueue) == 2:
-                  if passageQueue[0] == "P": return passageQueue
-                  if passageQueue[1] == "P": return passageQueue[::-1]
+                  if passageQueue[0][2] == "P": return passageQueue
+                  if passageQueue[1][2] == "P": return passageQueue[::-1]
                   # value is type Source + Destination + Priority for example : "NUN" for North Up Normal
                   for index, value in enumerate(passageQueue):
                         if index + 1 < len(passageQueue):
                               #print(passageQueue)
                               if value[1] == passageQueue[index+1][1]:
-                                    return shuffle([value, passageQueue])
+                                    a = [value, passageQueue[index+1]]
+                                    shuffle(a)
+                                    return a
                               else:
                                     # R = Right, S = Straight, L = Left, U = U-Turn
                                     if value[1] == 'R' :                return [value, passageQueue[index+1]]

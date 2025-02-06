@@ -1,16 +1,16 @@
 # main.py
 
-from multiprocessing import Array, Value, Process, Lock
 from vehicleGen import VehicleGen
 from lights import Lights
 from coordinator import Coordinator
+from display import Display
+from server import Server
+
+from multiprocessing import Array, Lock
 from utils import *
 from time import sleep
-import socket
 import os
-from display import Display
 import sysv_ipc
-from server import Server
 
 
 

@@ -43,10 +43,13 @@ class VehicleGen(Process):
             
             self.priority_direction_array = priority_direction_array
             self.lights_process = lights_process
+            
+            ### test to check if light process is created 
             try:
                   self.lights_pid:int = self.lights_process.pid
             except:
                   raise ChildProcessError("Cannot get the pid of a process not loaded in memory")
+
             self.generate_vehicle()
 
       ## @brief Generates a new vehicle entry.
@@ -65,8 +68,11 @@ class VehicleGen(Process):
                   with self.lock:
                         shift_array_add(self.priority_direction_array, get_direction(self.vehicle["source"]))
 
-                  #self.lights_process.priority_direction.value = get_direction(self.vehicle["source"])
-                  os.kill(self.lights_pid, signal.SIGUSR1)
+                  ### test to check if signal is send 
+                  try:
+                        os.kill(self.lights_pid, signal.SIGUSR1)
+                  except:
+                        raise KeyError("Process Light not started yet")
 
       ## @brief Runs the vehicle generation process.
       #  
@@ -75,16 +81,21 @@ class VehicleGen(Process):
       def run(self): 
             while True:
                   sleep(self.timeToWait)
-      
+                  
                   self.generate_vehicle()  # Random source/destination
-                  print(
-                        "Priority" if self.vehicle_priority_gen else "Normal", 
-                        "vehicle is being added to the queue \n\tsource : ",
-                        self.vehicle['source'],
-                        "\n\tdestination : ",
-                        self.vehicle['dest']
-                  )
+                  ### test to check all infos about the generated vehicle 
+                  # print(
+                  #       "Priority" if self.vehicle_priority_gen else "Normal", 
+                  #       "vehicle is being added to the queue \n\tsource : ",
+                  #       self.vehicle['source'],
+                  #       "\n\tdestination : ",
+                  #       self.vehicle['dest']
+                  # )
                   queue = get_queue(self.vehicle['source'], self.queues)  # Select appropriate queue
+                  
+                  ### test to check if it the right queue
+                  #print(get_queue(self.vehicle['source'], self.queues))
+
                   queue.send(self.vehicle['source'] + self.vehicle['dest'] + self.vehicle["priority"], type=1)  # Add vehicle to queue
         
                   
