@@ -63,12 +63,12 @@ class Coordinator(Process):
                               else:
                                     # R = Right, S = Straight, L = Left, U = U-Turn
                                     if value[1] == 'R' :                return [value, passageQueue[index+1]]
-                                    if passageQueue[index+1] == 'R' :   return [passageQueue[index+1], value]
+                                    if passageQueue[index+1][1] == 'R' :   return [passageQueue[index+1], value]
                                     if value[1] == 'S':                 return [value, passageQueue[index+1]]
-                                    if passageQueue[index+1] == 'S':    return [passageQueue[index+1], value]
+                                    if passageQueue[index+1][1] == 'S':    return [passageQueue[index+1], value]
                                     if value[1] == 'L':                 return [value, passageQueue[index+1]]
-                                    if passageQueue[index+1] == 'L':    return [passageQueue[index+1], value]
+                                    if passageQueue[index+1][1] == 'L':    return [passageQueue[index+1], value]
                                     if value[1] == 'U':                 return [value, passageQueue[index+1]]
-                                    if passageQueue[index+1] == 'U':    return [passageQueue[index+1], value]
+                                    if passageQueue[index+1][1] == 'U':    return [passageQueue[index+1], value]
             else:
                   return []
