@@ -40,7 +40,7 @@ class Lights(Process):
 
       def handle_priority_signal(self, sig, frame):
             with self.lock:
-                  print("lights", self.priority_mode_array[0], self.priority_mode_array[1], self.priority_mode_array[2], self.priority_mode_array[3])
+                  #print("lights", self.priority_mode_array[0], self.priority_mode_array[1], self.priority_mode_array[2], self.priority_mode_array[3])
                   shift_array_add(self.priority_mode_array, 1)
             if self.first_Time:
                   self.first_Time = False

@@ -21,6 +21,7 @@ TIMERS = {
       "sendUpdate": 0.1,
       "lightDuration": 0.05,
       "waitForServer": 5,
+      "fps": 5,
 }
 
 
@@ -173,7 +174,7 @@ def shift_array_remove(shared_array,a):
 
 empty_mq = lambda q: mq_to_list(q) == []
 
-def batsignal(main_pid, pid, sig=signal.SIGTERM):
+def batsignal(main_pid, sig=signal.SIGTERM):
     """Terminate the main process and all its child processes."""
     try:
         parent = psutil.Process(main_pid)

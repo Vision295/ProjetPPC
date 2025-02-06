@@ -60,7 +60,7 @@ class Display():
             self.images["fvh"] = pygame.transform.rotate(pygame.transform.scale(self.images["fvh"], (40, 50)), 90)
 
             self.clock = pygame.time.Clock()
-            self.fps = 20
+            self.fps = TIMERS["fps"]
             
             
       def run(self):
@@ -126,8 +126,8 @@ class Display():
                                                 case 1 : rotation = 90
                                                 case 3 : rotation = 270
                                                 case _ : rotation = 90 * i
-                                          print("\ndirection to face : ", i, jvalue[0], rotation)
-                                          print("\n")
+                                          #print("\ndirection to face : ", i, jvalue[0], rotation)
+                                          #print("\n")
                                           self.vehicles_to_display.append(
                                                 {
                                                       "pos": pos,
@@ -142,7 +142,7 @@ class Display():
                                     vehicle["pos"]
                               )
                         
-                        print(self.queues)
+                        #print(self.queues)
 
                         self.clock.tick(self.fps)
                         
@@ -151,7 +151,7 @@ class Display():
                         
                         for event in pygame.event.get():
                               if event.type == pygame.QUIT:
-                                    batsignal(os.getpid(), self.server_pid)
+                                    batsignal(os.getpid())
                                     pygame.quit()
                                     self.running = False
       

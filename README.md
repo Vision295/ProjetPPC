@@ -23,3 +23,4 @@ You can play with the sleep timers in the dictionnary TIMERS in the utils :
       - sendUpdate : time between send of the content of queues and lights by the server to the display
       - lightDuration : time of a tick (100 for one light duration) of a red light 
       - waitForServer : (not recommended) the time to wait the server to be up
+      - fps : number of frames updated per seconds in display
