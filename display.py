@@ -81,13 +81,11 @@ class Display():
                         if recived:
                               try:
                                     self.queues, self.lights = parse_message(recived.decode())
+                                    exit()
                               except:
                                     pass
                               
                               
-                        #print(self.queues)
-                        #print("lights : ", self.lights)
-
 
                         self.screen.blit(self.images["route"], (0, 0))
                         
@@ -114,14 +112,17 @@ class Display():
                               (220, 343)
                         ]
 
-                        for index, value in enumerate(self.queues.values()):
+                        for index, value in self.queues.items():
                               for jndex, jvalue in enumerate(value[:3]):
+                                    print("jvalue : ", index,value,jvalue,jndex)
+                                    print("queue : ", self.queues)
                                     
                                     if jvalue != "xxx":
+                                          i = int(index[1]) - 1
                                           self.vehicles_to_display.append(
                                                 {
-                                                      "pos": [offsets[index][0], offsets[index][1]],
-                                                      "rotation": index * 90,
+                                                      "pos": [offsets[i][0], offsets[i][1]],
+                                                      "rotation": i * 90,
                                                       "prio": jvalue[2],
                                                 }
                                           )

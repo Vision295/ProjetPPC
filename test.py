@@ -1,56 +1,12 @@
-from multiprocessing import Queue, Array, Value, Process
-import socket
+import sysv_ipc
 
-def format_queues(ListQueue, maxsize, trafficLights):
-      result = []
-      for i, q in enumerate(ListQueue):
-            items = []
-            while not q.empty():
-                  items.append(q.get())
-            for item in items : 
-                  q.put(item)
-            padded_items = items + ["xxx"] * (maxsize - len(items))
-            result.append(f"Q{i+1} : {' '.join(padded_items)}")
-      
-      traffic_light_str = "L : " + " ".join(map(str, trafficLights[:]))  # Convert Array to string
-      result.append(traffic_light_str)
-      return " , ".join(result)
+KEY = 1234  # Unique identifier for the queue
 
-def run_server(host, port, ListQueue, maxsize, trafficLights):
-      HOST, PORT = host, port
-      server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-      server_socket.bind((HOST, PORT))    
-      server_socket.listen()
-      print(f"Server listening on {HOST}:{PORT}")
+# Create or attach to an existing message queue
+mq = sysv_ipc.MessageQueue(KEY, sysv_ipc.IPC_CREAT)
 
-      while True:
-            conn, addr = server_socket.accept() 
-            with conn:
-                  print(f"Connected by {addr}")
-                  message = format_queues(ListQueue, maxsize, trafficLights)
-                  message_length = len(message.encode())
-                  conn.sendall(message.encode())
-                  print(message) #pour tester
-                  print(message_length)
+# Send a test message
+mq.send(", World!", type=1)
 
-MAXSIZE = 100
-HOST = 'localhost'
-PORT = 6666
-
-vehicleQueues = [
-    Queue(MAXSIZE),
-    Queue(MAXSIZE),
-    Queue(MAXSIZE),
-    Queue(MAXSIZE)
-]
-
-vehicleQueues[0].put("abc")
-vehicleQueues[1].put("def")
-vehicleQueues[1].put("ghi")
-vehicleQueues[2].put("jkl")
-
-
-trafficLigthStates = Array('b', [1, 1, 1, 1])
-
-run_server(HOST, PORT, vehicleQueues, MAXSIZE, trafficLigthStates)
+print("Message sent to the queue!")
 

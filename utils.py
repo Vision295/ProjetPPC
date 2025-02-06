@@ -1,5 +1,6 @@
 # utils.py
 
+import sysv_ipc
 from multiprocessing import Queue
 from random import random
 import socket
@@ -11,6 +12,8 @@ import re
 MAXSIZE = 1000
 HOST = 'localhost'
 PORT = 6662
+
+KEYS = [1200 + i for i in range(4)]
 
 
 
@@ -30,24 +33,63 @@ get_queue = lambda s, queues : queues[get_direction(s)]
 def get_queue(source:str, queues:list) -> Queue:
       return queues[get_direction(source)]
 
-def peek(queue:Queue) -> Queue:
-      try:
-            temp = [queue.get()]
-      except:
-            return None
-      while not queue.empty() : temp.append(queue.get())
-      val = temp[0]
-      while temp: queue.put(temp.pop(0))
-      return val
+def peek(key: int) -> str | None:
+      """
+      Peeks at the first message in the queue without losing it.
 
-def format_queues(ListQueue, maxsize, trafficLights):
+      Args:
+      key (int): The IPC key of the message queue.
+
+      Returns:
+      tuple[bytes, int] | None: The first message (as bytes) and its type, or None if the queue is empty.
+      """
+      try:
+            mq = sysv_ipc.MessageQueue(key)
+      except sysv_ipc.ExistentialError:
+            print("Message queue does not exist.")
+            return None
+
+      messages = []
+
+      # Drain the queue
+      while True:
+            try:
+                  msg, msg_type = mq.receive(block=False)  
+                  messages.append((msg, msg_type))  
+            except sysv_ipc.BusyError:
+                  break  
+
+            if not messages:
+                  print("Queue is empty.")
+                  return None
+
+      peeked_msg, _ = messages[0]
+
+      for msg, msg_type in messages:
+            mq.send(msg, type=msg_type)
+
+      return peeked_msg.decode()
+
+def mq_to_list(queue_id):
+      mq = sysv_ipc.MessageQueue(queue_id, sysv_ipc.IPC_CREAT)
+      messages = []
+      try:
+            while True:
+                  message, _ = mq.receive(block=False)
+                  messages.append(message.decode())
+      except sysv_ipc.BusyError : pass
+
+      for message in messages : mq.send(message.encode(), type=1)  
+
+      return messages
+
+def format_queues(maxsize, trafficLights):
       result = []
-      for i, q in enumerate(ListQueue):
-            items = []
-            while not q.empty():
-                  items.append(q.get())
-            for item in items : 
-                  q.put(item)
+      listQueue = []
+      for key in KEYS : listQueue.append(sysv_ipc.MessageQueue(key, sysv_ipc.IPC_CREAT))
+      
+      for i, q in enumerate(listQueue):
+            items = mq_to_list(KEYS[i])
             padded_items = items + ["xxx"] * (maxsize - len(items))
             result.append(f"Q{i+1} : {' '.join(padded_items)}")
       
@@ -55,7 +97,7 @@ def format_queues(ListQueue, maxsize, trafficLights):
       result.append(traffic_light_str)
       return " , ".join(result)
 
-def run_server(host, port, ListQueue, maxsize, trafficLights):
+def run_server(host, port, maxsize, trafficLights):
       try:
             HOST, PORT = host, port
             server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -68,7 +110,7 @@ def run_server(host, port, ListQueue, maxsize, trafficLights):
                   print(f"Connected by {addr}")
 
                   while True: 
-                        message = format_queues(ListQueue, maxsize, trafficLights)
+                        message = format_queues(maxsize, trafficLights)
                         conn.sendall(message.encode())
                         time.sleep(0.25)
                         
@@ -78,7 +120,6 @@ def run_server(host, port, ListQueue, maxsize, trafficLights):
             server_socket.close()
             print("Port released. Exiting.")
             sys.exit(0)
-
 
 def parse_message(msg: str) -> tuple[dict[str, list[str]], list[int]]:
     """
@@ -134,3 +175,6 @@ def parse_message(msg: str) -> tuple[dict[str, list[str]], list[int]]:
         print(f"Error parsing message: {e}")
         # Return empty defaults in case of any error
         return {'q1': [], 'q2': [], 'q3': [], 'q4': []}, [0, 0, 0, 0]
+
+
+empty_mq = lambda q: mq_to_list(q) == []

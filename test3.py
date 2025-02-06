@@ -1,6 +1,7 @@
+
 import sysv_ipc
 
-def enumerate_message_queue(queue_id):
+def mq_to_list(queue_id):
       mq = sysv_ipc.MessageQueue(queue_id, sysv_ipc.IPC_CREAT)
       messages = []
       try:
@@ -13,4 +14,12 @@ def enumerate_message_queue(queue_id):
 
       return messages
 
-print(enumerate_message_queue(1234))
+
+empty_queue = lambda q: mq_to_list(q) == []
+def is_message_queue_empty(queue_key):
+      return mq_to_list(queue_key) == []
+
+print(is_message_queue_empty(1234))
+print(mq_to_list(1234))
+
+

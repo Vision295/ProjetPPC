@@ -1,6 +1,6 @@
 # main.py
 
-from multiprocessing import Queue, Array, Value, Process, Lock, Manager
+from multiprocessing import Array, Value, Process, Lock
 from vehicleGen import VehicleGen
 from lights import Lights
 from coordinator import Coordinator
@@ -9,7 +9,7 @@ from time import sleep
 import socket
 import os
 from display import Display
-
+import sysv_ipc
 
 
 
@@ -18,19 +18,15 @@ if __name__ == "__main__":
 
       lock = Lock()
 
-      vehicleQueues = [
-            Queue(MAXSIZE),
-            Queue(MAXSIZE),
-            Queue(MAXSIZE),
-            Queue(MAXSIZE)
-      ]
+      for key in KEYS:
+            sysv_ipc.MessageQueue(key, sysv_ipc.IPC_CREAT)
 
       trafficLigthStates = Array('b', [0, 0, 0, 0])
       with Manager() as manager:  # Create a Manager for shared lists
             priority_list = manager.list([])       # Shared empty list
             priority_direction_list = manager.list([])  # Shared empty list
 
-      server_process = Process(target=run_server, args=(HOST, PORT, vehicleQueues, MAXSIZE, trafficLigthStates))
+      server_process = Process(target=run_server, args=(HOST, PORT, MAXSIZE, trafficLigthStates))
       server_process.start()
       print("Server process started.")
       sleep(5)
@@ -38,11 +34,11 @@ if __name__ == "__main__":
       lights = Lights(trafficLigthStates, priority_list, priority_direction_list, lock)
       lights.start()
       
-      coordinator = Coordinator(vehicleQueues, trafficLigthStates, priority_list, lock, priority_direction_list)
+      coordinator = Coordinator(trafficLigthStates, priority_mode, lock)
       coordinator.start()
 
-      normal_traffic_gen = VehicleGen(vehicleQueues, False, lights, priority_direction_list) # pas optimal car pas beoin de la list a voir
-      priority_traffic_gen = VehicleGen(vehicleQueues, True, lights, priority_direction_list) 
+      normal_traffic_gen = VehicleGen(False, lights)
+      priority_traffic_gen = VehicleGen(True, lights)
       
       haveToRun = True
       while haveToRun:
