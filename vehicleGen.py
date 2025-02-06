@@ -17,13 +17,6 @@ class VehicleGen(Process):
             This class is responsible for simulating vehicle arrivals at an intersection.
       """
 
-<<<<<<< HEAD
-      def __init__(self, queues:list[Queue], priority:bool, lights_process:Lights, priority_direction_list:list, lock):
-            super().__init__()
-
-            self.queues = queues
-            self.lock = lock
-=======
       def __init__(self, priority:bool, lights_process:Lights):
             """
                   @brief Constructor for the VehicleGen class.
@@ -44,7 +37,6 @@ class VehicleGen(Process):
             super().__init__()
 
             self.queues = [sysv_ipc.MessageQueue(key, sysv_ipc.IPC_CREAT) for key in KEYS]
->>>>>>> b2bd83b90b56fba7f717f033cc0c46be0b7eac20
             self.vehicle_priority_gen = priority
             
             self.timeToWait = 10 if self.vehicle_priority_gen else 2

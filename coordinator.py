@@ -11,13 +11,13 @@ import sysv_ipc
 
 class Coordinator(Process):
       
-      def __init__(self, lights_array:Array, priority_mode:Value, lock):
+      def __init__(self, lights_array:Array, priority_mode_array:Value, lock, priority_direction_array):
             super().__init__()
             self.lights_array = lights_array
             self.queues = [sysv_ipc.MessageQueue(key, sysv_ipc.IPC_CREAT) for key in KEYS]
-            self.priority_mode = priority_mode
+            self.priority_mode_array = priority_mode_array
             self.lock = lock
-            self.priority_direction_list=priority_direction_list
+            self.priority_direction_array=priority_direction_array
             
       def run(self): 
             """without any rules : everyone passes when he can"""
@@ -37,20 +37,10 @@ class Coordinator(Process):
                   if passageOrder:
                         next_to_go = passageOrder.pop(0)
 
-<<<<<<< HEAD
-                        
-                        if self.queues[get_direction(next_to_go[0])].get()[2] == "P":
-                              with self.lock:
-                                    if self.priority_list:
-                                          self.priority_list.pop(0)
-                                    if self.priority_direction_list:
-                                          self.priority_direction_list.pop(0)
-=======
                         with self.lock:
                               print(self.queues[get_direction(next_to_go[0])].receive()[0].decode()[2])
                               if self.queues[get_direction(next_to_go[0])].receive()[0].decode()[2] == "P":
                                           self.priority_mode.value = False
->>>>>>> b2bd83b90b56fba7f717f033cc0c46be0b7eac20
                         sleep(0.25)
                               
                   #print("after : ", passageQueue)

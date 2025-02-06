@@ -37,13 +37,8 @@ if __name__ == "__main__":
       coordinator = Coordinator(trafficLigthStates, priority_mode, lock)
       coordinator.start()
 
-<<<<<<< HEAD
-      normal_traffic_gen = VehicleGen(vehicleQueues, False, lights, priority_direction_list, lock) # pas optimal car pas beoin de la list a voir
-      priority_traffic_gen = VehicleGen(vehicleQueues, True, lights, priority_direction_list, lock) 
-=======
       normal_traffic_gen = VehicleGen(False, lights)
       priority_traffic_gen = VehicleGen(True, lights)
->>>>>>> b2bd83b90b56fba7f717f033cc0c46be0b7eac20
       
       haveToRun = True
       while haveToRun:
