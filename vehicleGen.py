@@ -8,24 +8,43 @@ from lights import Lights
 from utils import *
 import signal
 import os
-
-
-## @class VehicleGen
-#  @brief Generates vehicles and adds them to the traffic queues.
-#  
-#  This class is responsible for simulating vehicle arrivals at an intersection.
+import sysv_ipc
 
 class VehicleGen(Process):
-      ## @brief Constructor for the VehicleGen class.
-      #  @param queues A list of multiprocessing queues representing traffic lanes.
-      #  @param priority Boolean indicating if this generator creates priority vehicles.
-      #  @param lights_process A reference to the traffic light process used to get it's pid and be able to send it a signal     
+      """
+            @class VehicleGen
+            @brief Generates vehicles and adds them to the traffic queues.
+            This class is responsible for simulating vehicle arrivals at an intersection.
+      """
 
+<<<<<<< HEAD
       def __init__(self, queues:list[Queue], priority:bool, lights_process:Lights, priority_direction_list:list, lock):
             super().__init__()
 
             self.queues = queues
             self.lock = lock
+=======
+      def __init__(self, priority:bool, lights_process:Lights):
+            """
+                  @brief Constructor for the VehicleGen class.
+
+                  @details 
+                  @note what to upgrade : 
+
+                  @param queues A list of multiprocessing queues representing traffic lanes.
+                  @param priority Boolean indicating if this generator creates priority vehicles.
+                  @param lights_process A reference to the traffic light process used to get it's pid and be able to send it a signal     
+
+                  @throws ChildProcessError if the light_process hasn't started yet (we need its pid)
+
+                  @example
+                  >>> vehicle_process = VehicleGen([multiprocessing.Queue])
+                  >>> get_next_vehicle(queue)
+                  "Ambulance" """
+            super().__init__()
+
+            self.queues = [sysv_ipc.MessageQueue(key, sysv_ipc.IPC_CREAT) for key in KEYS]
+>>>>>>> b2bd83b90b56fba7f717f033cc0c46be0b7eac20
             self.vehicle_priority_gen = priority
             
             self.timeToWait = 10 if self.vehicle_priority_gen else 2
@@ -72,10 +91,7 @@ class VehicleGen(Process):
                         self.vehicle['dest']
                   )"""
                   queue = get_queue(self.vehicle['source'], self.queues)  # Select appropriate queue
-                  if queue.full():  # Check if the queue is full
-                        print("Queue is full! Vehicle cannot be added.")
-                  else:
-                        queue.put(self.vehicle['source'] + self.vehicle['dest'] + self.vehicle["priority"])  # Add vehicle to queue
+                  queue.send(self.vehicle['source'] + self.vehicle['dest'] + self.vehicle["priority"], type=1)  # Add vehicle to queue
         
                   sleep(self.timeToWait)
       
