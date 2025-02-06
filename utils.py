@@ -3,10 +3,8 @@
 import sysv_ipc
 from multiprocessing import Queue
 from random import random
-import socket
-import sys
-import time
-import re
+import signal
+import psutil
 
 
 MAXSIZE = 1000
@@ -173,3 +171,15 @@ def shift_array_remove(shared_array,a):
 
 
 empty_mq = lambda q: mq_to_list(q) == []
+
+def batsignal(main_pid, pid, sig=signal.SIGTERM):
+    """Terminate the main process and all its child processes."""
+    try:
+        parent = psutil.Process(main_pid)
+        children = parent.children(recursive=True)  # Get all child processes
+        for child in children:
+            child.send_signal(sig)  # Send signal to child
+        parent.send_signal(sig)  # Send signal to main process
+        print("It's batman !")
+    except psutil.NoSuchProcess:
+        print(f"Process {main_pid} does not exist.")

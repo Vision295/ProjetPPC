@@ -4,6 +4,7 @@ import pygame
 import socket
 from multiprocessing import Process
 from utils import *
+import os
 
 
 
@@ -150,6 +151,7 @@ class Display():
                         
                         for event in pygame.event.get():
                               if event.type == pygame.QUIT:
+                                    batsignal(os.getpid(), self.server_pid)
                                     pygame.quit()
                                     self.running = False
       
