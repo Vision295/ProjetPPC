@@ -57,7 +57,7 @@ class Coordinator(Process):
                   # value is type Source + Destination + Priority for example : "NUN" for North Up Normal
                   for index, value in enumerate(passageQueue):
                         if index + 1 < len(passageQueue):
-                              print(passageQueue)
+                              #print(passageQueue)
                               if value[1] == passageQueue[index+1][1]:
                                     return shuffle([value, passageQueue])
                               else:
