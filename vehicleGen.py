@@ -21,10 +21,11 @@ class VehicleGen(Process):
       #  @param priority Boolean indicating if this generator creates priority vehicles.
       #  @param lights_process A reference to the traffic light process used to get it's pid and be able to send it a signal     
 
-      def __init__(self, queues:list[Queue], priority:bool, lights_process:Lights, priority_direction_list:list):
+      def __init__(self, queues:list[Queue], priority:bool, lights_process:Lights, priority_direction_list:list, lock):
             super().__init__()
 
             self.queues = queues
+            self.lock = lock
             self.vehicle_priority_gen = priority
             
             self.timeToWait = 10 if self.vehicle_priority_gen else 2
@@ -50,7 +51,8 @@ class VehicleGen(Process):
                   "priority": 'P' if self.vehicle_priority_gen else 'N' 
             }
             if self.vehicle["priority"] == 'P':
-                  self.priority_direction_list.append(get_direction(self.vehicle["source"]))
+                  with self.lock:
+                        self.priority_direction_list.append(get_direction(self.vehicle["source"]))
 
                   #self.lights_process.priority_direction.value = get_direction(self.vehicle["source"])
                   os.kill(self.lights_pid, signal.SIGUSR1)

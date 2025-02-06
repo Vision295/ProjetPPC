@@ -35,9 +35,12 @@ class Coordinator(Process):
                   if passageOrder:
                         next_to_go = passageOrder.pop(0)
 
-                        with self.lock:
-                              if self.queues[get_direction(next_to_go[0])].get()[2] == "P":
+                        
+                        if self.queues[get_direction(next_to_go[0])].get()[2] == "P":
+                              with self.lock:
+                                    if self.priority_list:
                                           self.priority_list.pop(0)
+                                    if self.priority_direction_list:
                                           self.priority_direction_list.pop(0)
                         sleep(0.25)
                               

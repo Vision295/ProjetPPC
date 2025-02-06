@@ -46,11 +46,11 @@ class Lights(Process):
             while True:
                   time.sleep(0.25)
                   print("lights : ", self.priority_list)
-                  if (len(self.priority_list)!=0):
+                  if (self.priority_list):
                         self.change_priority_lights()
                   else:
                         self.change_normal_lights()
                         for _ in range(100):
                               time.sleep(0.05)
-                              if (len(self.priority_list)!=0):
+                              if (self.priority_list):
                                     break
