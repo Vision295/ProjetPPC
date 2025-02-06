@@ -33,7 +33,7 @@ if __name__ == "__main__":
       lights = Lights(trafficLigthStates, priority_mode_array, priority_direction_array, lock)
       lights.start()
       
-      coordinator = Coordinator(trafficLigthStates, priority_mode_array, lock)
+      coordinator = Coordinator(trafficLigthStates, priority_mode_array, lock, priority_direction_array)
       coordinator.start()
 
       normal_traffic_gen = VehicleGen(False, lights, lock, priority_direction_array)

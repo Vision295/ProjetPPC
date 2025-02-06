@@ -114,8 +114,8 @@ class Display():
 
                         for index, value in self.queues.items():
                               for jndex, jvalue in enumerate(value[:3]):
-                                    print("jvalue : ", index,value,jvalue,jndex)
-                                    print("queue : ", self.queues)
+                                    #print("jvalue : ", index,value,jvalue,jndex)
+                                    #print("queue : ", self.queues)
                                     
                                     if jvalue != "xxx":
                                           i = int(index[1]) - 1

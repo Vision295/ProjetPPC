@@ -24,7 +24,7 @@ class Coordinator(Process):
             while True:
 
                   sleep(0.25)
-                  print("coordinator : ", self.priority_list)
+                  
                   passageQueue = []
                   for index, light in enumerate(self.lights_array):
                         key = KEYS[index]
@@ -38,8 +38,9 @@ class Coordinator(Process):
                         next_to_go = passageOrder.pop(0)
 
                         with self.lock:
-                              print(self.queues[get_direction(next_to_go[0])].receive()[0].decode()[2])
+                              ##print(self.queues[get_direction(next_to_go[0])].receive()[0].decode()[2])
                               if self.queues[get_direction(next_to_go[0])].receive()[0].decode()[2] == "P":
+                                    print("coordinator",  self.priority_mode_array[0],  self.priority_mode_array[1],  self.priority_mode_array[2],  self.priority_mode_array[3])
                                     shift_array_remove(self.priority_mode_array, 0)
                                     shift_array_remove(self.priority_direction_array, 0)
                         sleep(0.25)
