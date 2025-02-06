@@ -17,7 +17,7 @@ class VehicleGen(Process):
             This class is responsible for simulating vehicle arrivals at an intersection.
       """
 
-      def __init__(self, priority:bool, lights_process:Lights):
+      def __init__(self, priority:bool, lights_process:Lights, lock, priority_direction_array):
             """
                   @brief Constructor for the VehicleGen class.
 
@@ -38,10 +38,10 @@ class VehicleGen(Process):
 
             self.queues = [sysv_ipc.MessageQueue(key, sysv_ipc.IPC_CREAT) for key in KEYS]
             self.vehicle_priority_gen = priority
-            
+            self.lock = lock
             self.timeToWait = 10 if self.vehicle_priority_gen else 2
             
-            self.priority_direction_list = priority_direction_list
+            self.priority_direction_array = priority_direction_array
             self.lights_process = lights_process
             try:
                   self.lights_pid:int = self.lights_process.pid
@@ -63,7 +63,7 @@ class VehicleGen(Process):
             }
             if self.vehicle["priority"] == 'P':
                   with self.lock:
-                        self.priority_direction_list.append(get_direction(self.vehicle["source"]))
+                        shift_array_add(self.priority_direction_array, get_direction(self.vehicle["source"]))
 
                   #self.lights_process.priority_direction.value = get_direction(self.vehicle["source"])
                   os.kill(self.lights_pid, signal.SIGUSR1)
@@ -74,6 +74,8 @@ class VehicleGen(Process):
                   
       def run(self): 
             while True:
+                  sleep(self.timeToWait)
+      
                   self.generate_vehicle()  # Random source/destination
                   """print(
                         "Priority" if self.vehicle_priority_gen else "Normal", 
@@ -85,5 +87,4 @@ class VehicleGen(Process):
                   queue = get_queue(self.vehicle['source'], self.queues)  # Select appropriate queue
                   queue.send(self.vehicle['source'] + self.vehicle['dest'] + self.vehicle["priority"], type=1)  # Add vehicle to queue
         
-                  sleep(self.timeToWait)
-      
+                  

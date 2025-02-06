@@ -36,8 +36,8 @@ if __name__ == "__main__":
       coordinator = Coordinator(trafficLigthStates, priority_mode_array, lock)
       coordinator.start()
 
-      normal_traffic_gen = VehicleGen(False, lights)
-      priority_traffic_gen = VehicleGen(True, lights)
+      normal_traffic_gen = VehicleGen(False, lights, lock, priority_direction_array)
+      priority_traffic_gen = VehicleGen(True, lights, lock, priority_direction_array)
       
       haveToRun = True
       while haveToRun:
