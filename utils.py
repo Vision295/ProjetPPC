@@ -15,6 +15,12 @@ PORT = 6662
 
 KEYS = [1200 + i for i in range(4)]
 
+TIMERS = {
+      "coordinatorUpdate": 0.01,
+      "normalCreation": 1,
+      "priorityCreation": 5,
+      "sendUpdate": 0.1
+}
 
 
 random_sleep_time = lambda param: random() * param
@@ -112,7 +118,7 @@ def run_server(host, port, maxsize, trafficLights):
                   while True: 
                         message = format_queues(maxsize, trafficLights)
                         conn.sendall(message.encode())
-                        time.sleep(0.25)
+                        time.sleep(TIMERS["sendUpdate"])
                         
       except KeyboardInterrupt:
             print("\nShutting down server")

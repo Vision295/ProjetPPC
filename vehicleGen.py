@@ -39,7 +39,7 @@ class VehicleGen(Process):
             self.queues = [sysv_ipc.MessageQueue(key, sysv_ipc.IPC_CREAT) for key in KEYS]
             self.vehicle_priority_gen = priority
             self.lock = lock
-            self.timeToWait = 10 if self.vehicle_priority_gen else 2
+            self.timeToWait = TIMERS["priorityCreation"] if self.vehicle_priority_gen else TIMERS["normalCreation"]
             
             self.priority_direction_array = priority_direction_array
             self.lights_process = lights_process
@@ -77,13 +77,13 @@ class VehicleGen(Process):
                   sleep(self.timeToWait)
       
                   self.generate_vehicle()  # Random source/destination
-                  """print(
+                  print(
                         "Priority" if self.vehicle_priority_gen else "Normal", 
                         "vehicle is being added to the queue \n\tsource : ",
                         self.vehicle['source'],
                         "\n\tdestination : ",
                         self.vehicle['dest']
-                  )"""
+                  )
                   queue = get_queue(self.vehicle['source'], self.queues)  # Select appropriate queue
                   queue.send(self.vehicle['source'] + self.vehicle['dest'] + self.vehicle["priority"], type=1)  # Add vehicle to queue
         
