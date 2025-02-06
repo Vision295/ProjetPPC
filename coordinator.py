@@ -31,6 +31,7 @@ class Coordinator(Process):
                         if light and not empty_mq(key):
                               passageQueue.append(peek(key))
                   
+                  print("passageQueue : ", passageQueue)
                   #print("before : ", passageQueue)
                   passageOrder = self.getPassageOrder(passageQueue)
 
@@ -43,7 +44,7 @@ class Coordinator(Process):
                                     print("coordinator",  self.priority_mode_array[0],  self.priority_mode_array[1],  self.priority_mode_array[2],  self.priority_mode_array[3])
                                     shift_array_remove(self.priority_mode_array, 0)
                                     shift_array_remove(self.priority_direction_array, 0)
-                        sleep(0.25)
+                        sleep(TIMERS["coordinatorUpdate"])
                               
                   #print("after : ", passageQueue)
                   

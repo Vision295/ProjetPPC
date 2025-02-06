@@ -18,8 +18,13 @@ if __name__ == "__main__":
 
       lock = Lock()
 
+      queues = {}
       for key in KEYS:
-            sysv_ipc.MessageQueue(key, sysv_ipc.IPC_CREAT)
+            while not empty_mq(key):
+                  sysv_ipc.MessageQueue(key, sysv_ipc.IPC_CREAT).receive()
+      
+      
+      
 
       trafficLigthStates = Array('b', [0, 0, 0, 0])
       priority_direction_array = Array('b', [0, 0, 0, 0])

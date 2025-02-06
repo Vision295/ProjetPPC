@@ -35,12 +35,7 @@ class Display():
             self.screen = pygame.display.set_mode((self.window_size, self.window_size))
             self.queues:dict[str] = {} 
             self.lights:list[int] = []
-            self.queues = [
-                  ['EUP', 'WLN', 'WLN', 'ELP', 'WUP', 'NSP', 'SSP', 'ESP', 'NSN', 'NSN'],
-                  ['EUN', 'SLN', 'SUP', 'WUP', 'NUN', 'SSP', 'NSP', 'WLN', 'WSN', 'NLP'],
-                  ['NUP', 'NUN', 'NRN', 'WUP', 'ELN', 'NUN', 'ELN', 'NLN', 'NUP', 'WSN'],
-                  ['SSN', 'EUP', 'SLN', 'WUN', 'EUN', 'ELP', 'NLN', 'NLP', 'WLN', 'WUP']
-            ]
+            self.vehicles_to_display = []
             
             self.images = {
                   "frh": "assets/feu_rouge.png",
@@ -92,9 +87,9 @@ class Display():
                         
                         lights_pos_on_screen = [
                               (400, 390),     
-                              (275, 390),      
+                              (400, 270), 
                               (275, 260),
-                              (400, 270)      
+                              (275, 390),      
                         ]
                         if self.lights:
                               for i, v in enumerate(self.lights):
@@ -104,7 +99,7 @@ class Display():
                                     elif v == 1 and i % 2 == 1:    self.screen.blit(self.images["fvh"], lights_pos_on_screen[i])
                         
                         
-                        self.vehicles_to_display = []
+                        self.vehicles_to_display.clear()
                         offsets = [
                               (351, 375),
                               (390, 306),
@@ -114,39 +109,47 @@ class Display():
 
                         for index, value in self.queues.items():
                               for jndex, jvalue in enumerate(value[:3]):
-                                    #print("jvalue : ", index,value,jvalue,jndex)
-                                    #print("queue : ", self.queues)
+                                    
+
                                     
                                     if jvalue != "xxx":
-                                          i = int(index[1]) - 1
+                                          i = get_direction(jvalue[0])
+                                          pos = [offsets[i][0], offsets[i][1]]
+                                          match index[1]:
+                                                case "0" : pos[0] -= 75 * jndex 
+                                                case "2" : pos[0] += 75 * jndex 
+                                                case "1" : pos[1] += 75 * jndex 
+                                                case "3" : pos[1] -= 75 * jndex 
+                                          rotation = 0
+                                          match i:
+                                                case 1 : rotation = 90
+                                                case 3 : rotation = 270
+                                                case _ : rotation = 90 * i
+                                          print("\ndirection to face : ", i, jvalue[0], rotation)
+                                          print("\n")
                                           self.vehicles_to_display.append(
                                                 {
-                                                      "pos": [offsets[i][0], offsets[i][1]],
-                                                      "rotation": i * 90,
+                                                      "pos": pos,
+                                                      "rotation": rotation,
                                                       "prio": jvalue[2],
                                                 }
                                           )
-                                          match index:
-                                                case 0 : self.vehicles_to_display[-1]["pos"][1] += 75 * jndex 
-                                                case 2 : self.vehicles_to_display[-1]["pos"][1] -= 75 * jndex 
-                                                case 1 : self.vehicles_to_display[-1]["pos"][0] += 75 * jndex 
-                                                case 3 : self.vehicles_to_display[-1]["pos"][0] -= 75 * jndex 
                                    
-                              
                         for vehicle in self.vehicles_to_display:
                               self.screen.blit(
                                     pygame.transform.rotate(self.images[vehicle["prio"]], vehicle["rotation"]),
                                     vehicle["pos"]
                               )
                         
+                        print(self.queues)
 
                         self.clock.tick(self.fps)
                         
                         
                         pygame.display.flip()
                         
-                        for even in pygame.event.get():
-                              if even.type == pygame.QUIT:
+                        for event in pygame.event.get():
+                              if event.type == pygame.QUIT:
                                     pygame.quit()
                                     self.running = False
       

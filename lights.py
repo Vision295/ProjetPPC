@@ -53,13 +53,12 @@ class Lights(Process):
             signal.signal(signal.SIGUSR1, self.handle_priority_signal)
 
             while True:
-                  time.sleep(0.25)
                   #print("lights : ", self.priority_mode_array)
                   if (self.priority_mode_array[0]==1):
                         self.change_priority_lights()
                   else:
                         self.change_normal_lights()
                         for _ in range(100):
-                              time.sleep(0.05)
+                              time.sleep(TIMERS["lightDuration"])
                               if (self.priority_mode_array[0]==1):
                                     break
