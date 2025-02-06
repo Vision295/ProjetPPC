@@ -9,9 +9,10 @@ import time
 import re
 
 
-MAXSIZE = 1000
+MAXSIZE = 100
 HOST = 'localhost'
 PORT = 6662
+PRIORITY_MAX = 100
 
 KEYS = [1200 + i for i in range(4)]
 

@@ -26,8 +26,8 @@ if __name__ == "__main__":
       
 
       trafficLigthStates = Array('b', [0, 0, 0, 0])
-      priority_direction_array = Array('b', [0, 0, 0, 0])
-      priority_mode_array = Array('b', [0, 0, 0, 0])
+      priority_direction_array = Array('b', [0 for _ in range(PRIORITY_MAX)])
+      priority_mode_array = Array('b', [0 for _ in range(PRIORITY_MAX)])
 
       server_process = Server(trafficLigthStates)
       server_process.start()
