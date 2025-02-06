@@ -175,6 +175,17 @@ def parse_message(msg: str) -> tuple[dict[str, list[str]], list[int]]:
         print(f"Error parsing message: {e}")
         # Return empty defaults in case of any error
         return {'q1': [], 'q2': [], 'q3': [], 'q4': []}, [0, 0, 0, 0]
+    
+def shift_array_add(shared_array, a):
+     
+      for i in range(len(shared_array)-1,0,-1):
+          shared_array[i] = shared_array[i-1]
+      shared_array[0] = a
+
+def shift_array_remove(shared_array,a):
+      for i in range(len(shared_array)-1):
+           shared_array[i] = shared_array[i+1]
+      shared_array[-1]=a
 
 
 empty_mq = lambda q: mq_to_list(q) == []
