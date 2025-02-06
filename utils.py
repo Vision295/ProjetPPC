@@ -19,7 +19,8 @@ TIMERS = {
       "coordinatorUpdate": 0.01,
       "normalCreation": 1,
       "priorityCreation": 5,
-      "sendUpdate": 0.1
+      "sendUpdate": 0.1,
+      "lightDuration": 0.05,
 }
 
 
