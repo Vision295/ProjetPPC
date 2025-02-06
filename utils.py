@@ -21,6 +21,7 @@ TIMERS = {
       "priorityCreation": 5,
       "sendUpdate": 0.1,
       "lightDuration": 0.05,
+      "waitForServer": 5,
 }
 
 
@@ -103,30 +104,6 @@ def format_queues(maxsize, trafficLights):
       traffic_light_str = "L : " + " ".join(map(str, trafficLights[:]))  # Convert Array to string
       result.append(traffic_light_str)
       return " , ".join(result)
-
-def run_server(host, port, maxsize, trafficLights):
-      try:
-            HOST, PORT = host, port
-            server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            server_socket.bind((HOST, PORT))    
-            server_socket.listen()
-            print(f"Server listening on {HOST}:{PORT}")
-
-            conn, addr = server_socket.accept() 
-            with conn:
-                  print(f"Connected by {addr}")
-
-                  while True: 
-                        message = format_queues(maxsize, trafficLights)
-                        conn.sendall(message.encode())
-                        time.sleep(TIMERS["sendUpdate"])
-                        
-      except KeyboardInterrupt:
-            print("\nShutting down server")
-      finally: 
-            server_socket.close()
-            print("Port released. Exiting.")
-            sys.exit(0)
 
 def parse_message(msg: str) -> tuple[dict[str, list[str]], list[int]]:
     """

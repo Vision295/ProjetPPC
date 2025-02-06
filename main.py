@@ -10,6 +10,7 @@ import socket
 import os
 from display import Display
 import sysv_ipc
+from server import Server
 
 
 
@@ -23,17 +24,14 @@ if __name__ == "__main__":
             while not empty_mq(key):
                   sysv_ipc.MessageQueue(key, sysv_ipc.IPC_CREAT).receive()
       
-      
-      
 
       trafficLigthStates = Array('b', [0, 0, 0, 0])
       priority_direction_array = Array('b', [0, 0, 0, 0])
       priority_mode_array = Array('b', [0, 0, 0, 0])
 
-      server_process = Process(target=run_server, args=(HOST, PORT, MAXSIZE, trafficLigthStates))
+      server_process = Server(trafficLigthStates)
       server_process.start()
-      print("Server process started.")
-      sleep(5)
+      sleep(TIMERS["waitForServer"])
 
       lights = Lights(trafficLigthStates, priority_mode_array, priority_direction_array, lock)
       lights.start()
