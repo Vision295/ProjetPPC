@@ -40,7 +40,8 @@ class Coordinator(Process):
                         with self.lock:
                               print(self.queues[get_direction(next_to_go[0])].receive()[0].decode()[2])
                               if self.queues[get_direction(next_to_go[0])].receive()[0].decode()[2] == "P":
-                                          self.priority_mode.value = False
+                                    shift_array_remove(self.priority_mode_array, 0)
+                                    shift_array_remove(self.priority_direction_array, 0)
                         sleep(0.25)
                               
                   #print("after : ", passageQueue)
